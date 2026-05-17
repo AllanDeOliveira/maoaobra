@@ -200,10 +200,48 @@
             const allLoaded = uLoaded && wLoaded && cLoaded && sLoaded && oLoaded && rLoaded && tLoaded;
 
             const [currentUser, setCurrentUser] = React.useState(null);
-            const [currentView, setCurrentView] = React.useState('HOME');
+            const [currentView, _setCurrentView] = React.useState('HOME');
             const [toast, setToast] = React.useState(null);
-            const [selectedWorkerId, setSelectedWorkerId] = React.useState(null);
-            const [selectedClientId, setSelectedClientId] = React.useState(null);
+            const [selectedWorkerId, _setSelectedWorkerId] = React.useState(null);
+            const [selectedClientId, _setSelectedClientId] = React.useState(null);
+
+            const pushState = (stateObj) => {
+                window.history.pushState(stateObj, '', window.location.pathname);
+            };
+
+            const setCurrentView = (view) => {
+                _setCurrentView(view);
+                _setSelectedWorkerId(null);
+                _setSelectedClientId(null);
+                pushState({ currentView: view, selectedWorkerId: null, selectedClientId: null });
+            };
+
+            const setSelectedWorkerId = (id) => {
+                _setSelectedWorkerId(id);
+                pushState({ currentView, selectedWorkerId: id, selectedClientId: null });
+            };
+
+            const setSelectedClientId = (id) => {
+                _setSelectedClientId(id);
+                pushState({ currentView, selectedWorkerId: null, selectedClientId: id });
+            };
+
+            React.useEffect(() => {
+                const handlePopState = (event) => {
+                    if (event.state) {
+                        _setCurrentView(event.state.currentView || 'HOME');
+                        _setSelectedWorkerId(event.state.selectedWorkerId || null);
+                        _setSelectedClientId(event.state.selectedClientId || null);
+                    } else {
+                        _setCurrentView('HOME');
+                        _setSelectedWorkerId(null);
+                        _setSelectedClientId(null);
+                    }
+                };
+                window.addEventListener('popstate', handlePopState);
+                window.history.replaceState({ currentView: 'HOME', selectedWorkerId: null, selectedClientId: null }, '', window.location.pathname);
+                return () => window.removeEventListener('popstate', handlePopState);
+            }, []);
 
             if (!allLoaded) {
                 return (
@@ -2030,6 +2068,7 @@
         const AdminSupport = () => {
             const { supportTickets, setSupportTickets, users } = useAppStore();
             const [replyMsg, setReplyMsg] = useState({});
+            const [activeTicketId, setActiveTicketId] = useState(null);
 
             const handleReply = (ticketId) => {
                 if(!replyMsg[ticketId]) return;
@@ -2040,49 +2079,86 @@
 
             const closeTicket = (ticketId) => {
                 setSupportTickets(supportTickets.map(t => t.id === ticketId ? { ...t, status: 'CLOSED' } : t));
+                setActiveTicketId(null);
             };
+
+            const openTickets = supportTickets.filter(t => t.status === 'OPEN');
 
             return (
                 <div className="pb-24 animate-fade-in w-full max-w-5xl mx-auto">
-                    <Header title="Suporte Central (Admin)" />
+                    <Header title={activeTicketId ? "Chat de Suporte" : "Suporte Central (Admin)"} showBack={!!activeTicketId} onBack={() => setActiveTicketId(null)} />
                     <div className="px-4 md:px-8 space-y-6">
-                        {supportTickets.filter(t => t.status === 'OPEN').map(t => {
-                            const u = users.find(x => x.id === t.user_id);
-                            return (
-                                <div key={t.id} className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col">
-                                    <div className="flex justify-between items-center mb-4 border-b border-gray-100 pb-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 bg-primary/10 text-primary rounded-full flex items-center justify-center"><i className="ph-fill ph-headset text-xl"></i></div>
-                                            <div>
-                                                <h4 className="font-extrabold text-dark">{u?.nome}</h4>
-                                                <p className="text-xs text-gray-500 font-bold">{u?.email} • ID: {t.id}</p>
+                        {!activeTicketId ? (
+                            <>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {openTickets.map(t => {
+                                        const u = users.find(x => x.id === t.user_id);
+                                        const lastMsg = t.messages[t.messages.length - 1];
+                                        return (
+                                            <div key={t.id} className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col hover:shadow-md transition">
+                                                <div className="flex items-center gap-3 mb-4 border-b border-gray-100 pb-4">
+                                                    <div className="w-10 h-10 bg-primary/10 text-primary rounded-full flex items-center justify-center shrink-0"><i className="ph-fill ph-headset text-xl"></i></div>
+                                                    <div>
+                                                        <h4 className="font-extrabold text-dark">{u?.nome}</h4>
+                                                        <p className="text-[10px] text-gray-500 font-bold truncate">ID: {t.id}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="flex-1 mb-4">
+                                                    <p className="text-xs text-gray-400 font-extrabold uppercase mb-1">Última Mensagem</p>
+                                                    <p className="text-sm text-gray-600 line-clamp-2 italic font-medium">"{lastMsg?.text}"</p>
+                                                </div>
+                                                <button onClick={() => setActiveTicketId(t.id)} className="w-full bg-primary/10 text-primary font-extrabold py-3 rounded-xl hover:bg-primary hover:text-white transition flex items-center justify-center gap-2">
+                                                    <i className="ph-bold ph-chat-teardrop-text"></i> Abrir Chat do Ticket
+                                                </button>
                                             </div>
-                                        </div>
-                                        <button onClick={() => closeTicket(t.id)} className="bg-red-50 text-red-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-red-100 transition">Encerrar Ticket</button>
+                                        )
+                                    })}
+                                </div>
+                                {openTickets.length === 0 && (
+                                    <div className="text-center p-10 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                                        <i className="ph-fill ph-check-circle text-5xl text-green-500 mb-2"></i>
+                                        <h3 className="font-extrabold text-lg text-dark">Nenhum ticket aberto</h3>
+                                        <p className="text-gray-500 text-sm font-medium">Todos os usuários foram atendidos no momento.</p>
                                     </div>
-                                    <div className="bg-gray-50 h-64 overflow-y-auto p-4 rounded-xl mb-4 space-y-3">
-                                        {t.messages.map((msg, i) => (
-                                            <div key={i} className={`flex items-start gap-2 ${msg.sender === 'ADMIN' ? 'justify-end' : ''}`}>
-                                                <div className={`p-3 rounded-2xl text-sm shadow-sm ${msg.sender === 'ADMIN' ? 'bg-primary text-white rounded-tr-none' : 'bg-white border border-gray-200 text-dark rounded-tl-none'}`}>
-                                                    {msg.text}
-                                                    <div className={`text-[10px] mt-1 text-right ${msg.sender === 'ADMIN' ? 'text-white/70' : 'text-gray-400'}`}>{msg.time}</div>
+                                )}
+                            </>
+                        ) : (
+                            // View do Chat
+                            openTickets.filter(t => t.id === activeTicketId).map(t => {
+                                const u = users.find(x => x.id === t.user_id);
+                                return (
+                                    <div key={t.id} className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col animate-fade-in">
+                                        <div className="flex justify-between items-center mb-4 border-b border-gray-100 pb-4">
+                                            <div className="flex items-center gap-3">
+                                                <img src={u?.foto_perfil_url || 'https://ui-avatars.com/api/?name=User'} className="w-10 h-10 rounded-full object-cover" />
+                                                <div>
+                                                    <h4 className="font-extrabold text-dark">{u?.nome}</h4>
+                                                    <p className="text-xs text-gray-500 font-bold">{u?.email}</p>
                                                 </div>
                                             </div>
-                                        ))}
+                                            <button onClick={() => { if(window.confirm('Tem certeza que deseja encerrar este ticket?')) closeTicket(t.id); }} className="bg-red-50 text-red-600 px-3 py-2 rounded-xl text-xs font-bold hover:bg-red-100 transition border border-red-100 flex items-center gap-1">
+                                                <i className="ph-bold ph-x-circle"></i> Encerrar
+                                            </button>
+                                        </div>
+                                        <div className="bg-gray-50 h-80 overflow-y-auto p-4 rounded-xl mb-4 space-y-3">
+                                            {t.messages.map((msg, i) => (
+                                                <div key={i} className={`flex items-start gap-2 ${msg.sender === 'ADMIN' ? 'justify-end' : ''}`}>
+                                                    <div className={`p-3 rounded-2xl text-sm shadow-sm ${msg.sender === 'ADMIN' ? 'bg-primary text-white rounded-tr-none' : 'bg-white border border-gray-200 text-dark rounded-tl-none'}`}>
+                                                        <p className="font-medium whitespace-pre-wrap">{msg.text}</p>
+                                                        <div className={`text-[10px] mt-1 text-right ${msg.sender === 'ADMIN' ? 'text-white/70' : 'text-gray-400'}`}>{msg.time}</div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <input type="text" value={replyMsg[t.id] || ''} onChange={e => setReplyMsg({...replyMsg, [t.id]: e.target.value})} onKeyDown={e => e.key === 'Enter' && handleReply(t.id)} placeholder="Responder ao usuário..." className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-primary font-medium" />
+                                            <button onClick={() => handleReply(t.id)} className="px-6 rounded-xl bg-primary text-white font-bold hover:bg-primaryDark transition shadow-md shadow-primary/20 flex items-center gap-2">
+                                                <i className="ph-bold ph-paper-plane-right"></i> Responder
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div className="flex gap-2">
-                                        <input type="text" value={replyMsg[t.id] || ''} onChange={e => setReplyMsg({...replyMsg, [t.id]: e.target.value})} onKeyDown={e => e.key === 'Enter' && handleReply(t.id)} placeholder="Responder ao usuário..." className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-primary" />
-                                        <button onClick={() => handleReply(t.id)} className="px-6 rounded-xl bg-primary text-white font-bold hover:bg-primaryDark transition shadow-md shadow-primary/20">Responder</button>
-                                    </div>
-                                </div>
-                            )
-                        })}
-                        {supportTickets.filter(t => t.status === 'OPEN').length === 0 && (
-                            <div className="text-center p-10 bg-white rounded-3xl border border-gray-100 shadow-sm">
-                                <i className="ph-fill ph-check-circle text-5xl text-green-500 mb-2"></i>
-                                <h3 className="font-extrabold text-lg text-dark">Nenhum ticket aberto</h3>
-                                <p className="text-gray-500 text-sm">Todos os usuários foram atendidos.</p>
-                            </div>
+                                )
+                            })
                         )}
                     </div>
                 </div>
