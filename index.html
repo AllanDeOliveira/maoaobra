@@ -853,16 +853,23 @@
         const HomeContratante = ({ onSelectWorker }) => {
             const { users, workerDetails, reviews } = useAppStore();
             const [selectedCategory, setSelectedCategory] = useState('Todos');
+            const [searchQuery, setSearchQuery] = useState('');
 
             const workers = users.filter(u => u.role === 'TRABALHADOR' && u.status === 'APPROVED');
             const categories = ['Todos', 'Eletricista', 'Encanador', 'Diarista', 'Pintor', 'Montador'];
 
-            const filteredWorkers = selectedCategory === 'Todos'
-                ? workers
-                : workers.filter(w => {
-                    const details = workerDetails.find(d => d.user_id === w.id);
-                    return details?.categorias.some(c => c === selectedCategory || (c === 'Elétrica' && selectedCategory === 'Eletricista'));
-                });
+            const filteredWorkers = workers.filter(w => {
+                const details = workerDetails.find(d => d.user_id === w.id);
+                const matchCategory = selectedCategory === 'Todos' || details?.categorias.some(c => c === selectedCategory || (c === 'Elétrica' && selectedCategory === 'Eletricista'));
+                
+                const searchLower = searchQuery.toLowerCase();
+                const matchSearch = !searchQuery || 
+                                    w.nome.toLowerCase().includes(searchLower) || 
+                                    details?.categorias.some(c => c.toLowerCase().includes(searchLower)) ||
+                                    (details?.bio && details.bio.toLowerCase().includes(searchLower));
+                                    
+                return matchCategory && matchSearch;
+            });
 
             return (
                 <div className="w-full animate-fade-in">
@@ -871,7 +878,7 @@
                             <h1 className="text-3xl md:text-4xl font-extrabold text-dark mb-4 mt-4">Encontre os melhores profissionais.</h1>
                             <div className="relative mt-6 shadow-lg shadow-gray-200/50 rounded-2xl">
                                 <i className="ph-bold ph-magnifying-glass absolute left-5 top-4 text-gray-400 text-xl"></i>
-                                <input type="text" placeholder="O que você precisa hoje?" className="w-full pl-14 pr-4 py-4 bg-white border border-gray-200 rounded-2xl font-bold text-lg focus:ring-4 focus:ring-primary/20 focus:border-primary outline-none transition-all" />
+                                <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Busque por nome, categoria ou palavra-chave..." className="w-full pl-14 pr-4 py-4 bg-white border border-gray-200 rounded-2xl font-bold text-lg focus:ring-4 focus:ring-primary/20 focus:border-primary outline-none transition-all" />
                             </div>
                         </div>
 
