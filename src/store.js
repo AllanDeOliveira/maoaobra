@@ -108,13 +108,13 @@ export const useAppStore = create((set, get) => ({
   toast: null,
 
   // ---- SETTERS COM PERSISTÊNCIA FIREBASE ----
-  setUsers: (v) => { set({ users: v }); saveToFirebase('maos_v6_users', v); },
-  setWorkerDetails: (v) => { set({ workerDetails: v }); saveToFirebase('maos_v6_worker_details', v); },
-  setContratanteDetails: (v) => { set({ contratanteDetails: v }); saveToFirebase('maos_v6_contratante_details', v); },
-  setServices: (v) => { set({ services: v }); saveToFirebase('maos_v6_services', v); },
-  setOrders: (v) => { set({ orders: v }); saveToFirebase('maos_v6_orders', v); },
-  setReviews: (v) => { set({ reviews: v }); saveToFirebase('maos_v6_reviews', v); },
-  setSupportTickets: (v) => { set({ supportTickets: v }); saveToFirebase('maos_v6_support_tickets', v); },
+  setUsers: (v) => { set({ users: v }); saveToFirebase('maos_v7_users', v); },
+  setWorkerDetails: (v) => { set({ workerDetails: v }); saveToFirebase('maos_v7_worker_details', v); },
+  setContratanteDetails: (v) => { set({ contratanteDetails: v }); saveToFirebase('maos_v7_contratante_details', v); },
+  setServices: (v) => { set({ services: v }); saveToFirebase('maos_v7_services', v); },
+  setOrders: (v) => { set({ orders: v }); saveToFirebase('maos_v7_orders', v); },
+  setReviews: (v) => { set({ reviews: v }); saveToFirebase('maos_v7_reviews', v); },
+  setSupportTickets: (v) => { set({ supportTickets: v }); saveToFirebase('maos_v7_support_tickets', v); },
 
   setCurrentView: (view) => {
     set({ currentView: view, selectedWorkerId: null, selectedClientId: null });
@@ -198,12 +198,12 @@ export const useAppStore = create((set, get) => ({
       if (loadedCount === 7) set({ isLoaded: true });
     };
 
-    syncWithFirebase('maos_v6_users', INITIAL_USERS, (data) => { set({ users: data }); checkLoaded(); });
-    syncWithFirebase('maos_v6_worker_details', INITIAL_WORKER_DETAILS, (data) => { set({ workerDetails: data }); checkLoaded(); });
-    syncWithFirebase('maos_v6_contratante_details', INITIAL_CONTRATANTE_DETAILS, (data) => { set({ contratanteDetails: data }); checkLoaded(); });
-    syncWithFirebase('maos_v6_services', INITIAL_SERVICES, (data) => { set({ services: data }); checkLoaded(); });
-    syncWithFirebase('maos_v6_orders', [], (data) => { set({ orders: data }); checkLoaded(); });
-    syncWithFirebase('maos_v6_reviews', [], (data) => { set({ reviews: data }); checkLoaded(); });
-    syncWithFirebase('maos_v6_support_tickets', [], (data) => { set({ supportTickets: data }); checkLoaded(); });
+    syncWithFirebase('maos_v7_users', INITIAL_USERS, (data) => { set({ users: data }); checkLoaded(); });
+    syncWithFirebase('maos_v7_worker_details', INITIAL_WORKER_DETAILS, (data) => { set({ workerDetails: data }); checkLoaded(); });
+    syncWithFirebase('maos_v7_contratante_details', INITIAL_CONTRATANTE_DETAILS, (data) => { set({ contratanteDetails: data }); checkLoaded(); });
+    syncWithFirebase('maos_v7_services', INITIAL_SERVICES, (data) => { set({ services: data }); checkLoaded(); });
+    syncWithFirebase('maos_v7_orders', [], (data) => { set({ orders: data }); checkLoaded(); });
+    syncWithFirebase('maos_v7_reviews', [], (data) => { set({ reviews: data }); checkLoaded(); });
+    syncWithFirebase('maos_v7_support_tickets', [], (data) => { set({ supportTickets: data }); checkLoaded(); });
   }
 }));
