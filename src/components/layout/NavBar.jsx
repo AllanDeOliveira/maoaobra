@@ -105,7 +105,7 @@ export default function NavBar() {
                 <i className={`text-xl ${active ? 'ph-fill' : 'ph'} ${link.icon}`} />
                 {badge && <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white animate-pulse" />}
               </div>
-              <span className="text-[9px] font-bold">{link.label}</span>
+              <span className="text-[10px] font-bold">{link.label}</span>
             </button>
           );
         })}

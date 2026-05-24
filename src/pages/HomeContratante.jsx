@@ -35,16 +35,17 @@ export default function HomeContratante({ onSelectWorker }) {
       {/* HERO */}
       <div className="bg-white border-b border-gray-100 pt-4 pb-8 mb-8 md:rounded-3xl md:shadow-sm md:mt-2">
         <div className="px-4 md:px-8 max-w-4xl mx-auto text-center">
-          <h1 className="text-2xl md:text-4xl font-extrabold text-[#1F2937] mb-2 md:mb-4 mt-2 md:mt-4 leading-tight">
+          <h1 className="text-2xl md:text-4xl font-extrabold text-[#1F2937] mb-2 mt-2 md:mt-4 leading-tight">
             Encontre os melhores profissionais.
           </h1>
+          <p className="text-sm md:text-base text-gray-500 font-bold mb-4">O que você está precisando resolver hoje?</p>
           <div className="relative mt-4 md:mt-6 shadow-lg shadow-gray-200/50 rounded-2xl mx-2 md:mx-0">
             <i className="ph-bold ph-magnifying-glass absolute left-4 md:left-5 top-3.5 md:top-4 text-gray-400 text-lg md:text-xl" />
             <input
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              placeholder="Busque nome, categoria..."
+              placeholder="Ex: Encanador, Limpeza..."
               className="w-full pl-12 md:pl-14 pr-3 py-3 md:py-4 bg-white border border-gray-200 rounded-2xl font-bold text-sm md:text-lg focus:ring-4 focus:ring-red-100 focus:border-[#EA1D2C] outline-none transition-all"
             />
           </div>

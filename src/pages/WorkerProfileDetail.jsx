@@ -234,7 +234,7 @@ export default function WorkerProfileDetail({ workerId, onBack }) {
             <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-xl sticky top-28">
               <h3 className="font-extrabold text-[#1F2937] text-lg mb-4">Gostou do perfil?</h3>
               <button onClick={openRequest} disabled={!finalIsOnline} className={`w-full font-extrabold py-4 rounded-2xl flex items-center justify-center gap-2 transition transform mb-3 ${finalIsOnline ? 'bg-[#EA1D2C] text-white shadow-lg shadow-red-500/30 hover:bg-[#c41020] hover:-translate-y-1' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>
-                {finalIsOnline ? 'Solicitar Orçamento' : 'Fora de Horário'}
+                {finalIsOnline ? 'Chamar Profissional' : 'Fora de Horário'}
               </button>
               <a href={`https://wa.me/55${worker.telefone}?text=Olá ${worker.nome}, encontrei seu perfil no MãoAobra e gostaria de um serviço.`} target="_blank" rel="noreferrer" className="w-full bg-green-50 border border-green-200 text-green-700 font-extrabold py-4 rounded-2xl flex items-center justify-center gap-2 hover:bg-green-100 transition">
                 <i className="ph-fill ph-whatsapp-logo text-2xl" /> WhatsApp
@@ -250,7 +250,7 @@ export default function WorkerProfileDetail({ workerId, onBack }) {
           <i className="ph-fill ph-whatsapp-logo text-2xl" />
         </a>
         <button onClick={openRequest} disabled={!finalIsOnline} className={`flex-1 font-extrabold rounded-2xl flex items-center justify-center gap-2 py-4 ${finalIsOnline ? 'bg-[#EA1D2C] text-white shadow-lg shadow-red-500/30' : 'bg-gray-200 text-gray-400'}`}>
-          {finalIsOnline ? 'Solicitar Orçamento' : 'Indisponível'}
+          {finalIsOnline ? 'Chamar Profissional' : 'Indisponível'}
         </button>
       </div>
 

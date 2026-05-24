@@ -56,15 +56,15 @@ export default function LoginScreen() {
           <p className="text-gray-500 text-sm mb-4 font-bold">Ainda não tem conta?</p>
           <button onClick={() => setCurrentView('REGISTER')}
             className="w-full bg-white border-2 border-gray-200 text-[#1F2937] font-bold py-4 rounded-xl hover:border-[#EA1D2C] hover:text-[#EA1D2C] transition-all">
-            Criar nova conta
+            Quero me Cadastrar
           </button>
         </div>
 
         <div className="mt-6 p-4 bg-gray-50 rounded-xl text-xs text-gray-500 font-medium">
-          <p className="font-bold text-gray-700 mb-1">Contas de demonstração:</p>
-          <p>Admin: legalmano@gmail.com / 123</p>
-          <p>Trabalhador: allan@gmail.com / 123</p>
-          <p>Cliente: vini@gmail.com / 123</p>
+          <p className="font-bold text-gray-700 mb-1">Contas para teste (Senha: 123):</p>
+          <p>Admin: legalmano@gmail.com</p>
+          <p>Trabalhador: eduardo@gmail.com</p>
+          <p>Cliente: pedro@gmail.com</p>
         </div>
       </div>
     </div>
