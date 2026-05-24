@@ -25,6 +25,27 @@ export default function WorkerProfileDetail({ workerId, onBack }) {
   const myDetails = currentUser ? useAppStore.getState().contratanteDetails?.find(d => d.user_id === currentUser.id) || workerDetails.find(d => d.user_id === currentUser.id) : null;
   const distance = getEstimatedDistance(myDetails, details);
 
+  const horaInicio = details?.horaInicio || '08:00';
+  const horaFim = details?.horaFim || '18:00';
+  
+  let isWithinHours = true;
+  try {
+    const agora = new Date();
+    const horaAtual = agora.getHours() * 60 + agora.getMinutes();
+    const [hI, mI] = horaInicio.split(':').map(Number);
+    const inicioMinutos = hI * 60 + mI;
+    const [hF, mF] = horaFim.split(':').map(Number);
+    let fimMinutos = hF * 60 + mF;
+    if (fimMinutos < inicioMinutos) fimMinutos += 24 * 60;
+    let adjustedAtual = horaAtual;
+    if (horaAtual < inicioMinutos && fimMinutos > 24 * 60) adjustedAtual += 24 * 60;
+    
+    if (adjustedAtual < inicioMinutos || adjustedAtual > fimMinutos) isWithinHours = false;
+  } catch(e) {}
+  
+  const finalIsOnline = details?.isOnline && isWithinHours;
+  const workingHoursDisplay = `${horaInicio} às ${horaFim}`;
+
   if (!worker || !details) return null;
 
   const handleSolicitar = (servicoId, descricaoMsg, agendamento) => {
@@ -50,6 +71,7 @@ export default function WorkerProfileDetail({ workerId, onBack }) {
   const openRequest = () => {
     if (!currentUser) { showToast('Por favor, faça login.', 'warning'); setCurrentView('LOGIN'); return; }
     if (currentUser.role === 'TRABALHADOR') { showToast('Apenas clientes podem solicitar serviços.', 'error'); return; }
+    if (!finalIsOnline) { showToast('Profissional indisponível no momento.', 'warning'); return; }
     setIsRequestModalOpen(true);
   };
 
@@ -78,9 +100,9 @@ export default function WorkerProfileDetail({ workerId, onBack }) {
                 <h1 className="text-3xl font-extrabold text-[#1F2937]">{worker.nome}</h1>
                 <p className="text-[#EA1D2C] font-extrabold text-sm tracking-widest uppercase mt-1">{details.categorias?.join(', ')}</p>
               </div>
-              <div className={`px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 border shadow-sm ${details.isOnline ? 'bg-green-50 text-green-700 border-green-200' : 'bg-gray-50 text-gray-600 border-gray-200'}`}>
-                <div className={`w-2.5 h-2.5 rounded-full ${details.isOnline ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
-                {details.isOnline ? 'Disponível' : 'Indisponível'}
+              <div className={`px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 border shadow-sm ${finalIsOnline ? 'bg-green-50 text-green-700 border-green-200' : 'bg-gray-50 text-gray-600 border-gray-200'}`}>
+                <div className={`w-2.5 h-2.5 rounded-full ${finalIsOnline ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
+                {finalIsOnline ? 'Disponível' : 'Indisponível'}
               </div>
             </div>
             <div className="mt-6 flex flex-wrap gap-6 bg-gray-50 p-4 rounded-2xl border border-gray-100">
@@ -97,7 +119,7 @@ export default function WorkerProfileDetail({ workerId, onBack }) {
               </div>
               <div className="w-px bg-gray-200 hidden md:block" />
               <div className="flex flex-col w-full md:w-auto">
-                <div className="font-extrabold text-base text-[#1F2937] flex items-center gap-1"><i className="ph-fill ph-clock text-[#EA1D2C]" /> {details.workingHours || 'A combinar'}</div>
+                <div className="font-extrabold text-base text-[#1F2937] flex items-center gap-1"><i className="ph-fill ph-clock text-[#EA1D2C]" /> {workingHoursDisplay}</div>
                 <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">Horários</span>
               </div>
               {distance && (
@@ -211,8 +233,8 @@ export default function WorkerProfileDetail({ workerId, onBack }) {
           <div className="hidden lg:block space-y-6">
             <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-xl sticky top-28">
               <h3 className="font-extrabold text-[#1F2937] text-lg mb-4">Gostou do perfil?</h3>
-              <button onClick={openRequest} className="w-full bg-[#EA1D2C] text-white font-extrabold py-4 rounded-2xl shadow-lg shadow-red-500/30 flex items-center justify-center gap-2 hover:bg-[#c41020] transition transform hover:-translate-y-1 mb-3">
-                Solicitar Orçamento
+              <button onClick={openRequest} disabled={!finalIsOnline} className={`w-full font-extrabold py-4 rounded-2xl flex items-center justify-center gap-2 transition transform mb-3 ${finalIsOnline ? 'bg-[#EA1D2C] text-white shadow-lg shadow-red-500/30 hover:bg-[#c41020] hover:-translate-y-1' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>
+                {finalIsOnline ? 'Solicitar Orçamento' : 'Fora de Horário'}
               </button>
               <a href={`https://wa.me/55${worker.telefone}?text=Olá ${worker.nome}, encontrei seu perfil no MãoAobra e gostaria de um serviço.`} target="_blank" rel="noreferrer" className="w-full bg-green-50 border border-green-200 text-green-700 font-extrabold py-4 rounded-2xl flex items-center justify-center gap-2 hover:bg-green-100 transition">
                 <i className="ph-fill ph-whatsapp-logo text-2xl" /> WhatsApp
@@ -227,8 +249,8 @@ export default function WorkerProfileDetail({ workerId, onBack }) {
         <a href={`https://wa.me/55${worker.telefone}`} target="_blank" rel="noreferrer" className="bg-green-500 text-white rounded-2xl p-4 flex items-center justify-center shadow-lg shadow-green-500/30">
           <i className="ph-fill ph-whatsapp-logo text-2xl" />
         </a>
-        <button onClick={openRequest} className="flex-1 bg-[#EA1D2C] text-white font-extrabold rounded-2xl shadow-lg shadow-red-500/30 flex items-center justify-center gap-2 py-4">
-          Solicitar Orçamento
+        <button onClick={openRequest} disabled={!finalIsOnline} className={`flex-1 font-extrabold rounded-2xl flex items-center justify-center gap-2 py-4 ${finalIsOnline ? 'bg-[#EA1D2C] text-white shadow-lg shadow-red-500/30' : 'bg-gray-200 text-gray-400'}`}>
+          {finalIsOnline ? 'Solicitar Orçamento' : 'Indisponível'}
         </button>
       </div>
 

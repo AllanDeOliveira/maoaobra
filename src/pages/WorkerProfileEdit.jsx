@@ -76,8 +76,12 @@ export default function WorkerProfileEdit() {
                   </button>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-2xl border border-gray-200">
-                  <div className="font-extrabold text-[#1F2937] text-sm mb-2">Horários de Trabalho</div>
-                  <input type="text" defaultValue={details?.workingHours || 'A combinar'} onBlur={e => { setWorkerDetails(workerDetails.map(w => w.user_id === currentUser.id ? { ...w, workingHours: e.target.value } : w)); showToast('Horários atualizados!'); }} className="w-full px-3 py-2 text-sm rounded-xl border border-gray-300 outline-none focus:border-[#EA1D2C] focus:ring-1 focus:ring-[#EA1D2C]" placeholder="Ex: Seg-Sex 08:00-18:00" />
+                  <div className="font-extrabold text-[#1F2937] text-sm mb-2">Horário de Atendimento (Início e Fim)</div>
+                  <div className="flex flex-col md:flex-row items-center gap-2">
+                    <input type="time" defaultValue={details?.horaInicio || '08:00'} onBlur={e => { setWorkerDetails(workerDetails.map(w => w.user_id === currentUser.id ? { ...w, horaInicio: e.target.value } : w)); showToast('Horário inicial salvo!'); }} className="w-full md:flex-1 px-3 py-2 text-sm rounded-xl border border-gray-300 outline-none focus:border-[#EA1D2C] focus:ring-1 focus:ring-[#EA1D2C]" />
+                    <span className="font-bold text-gray-400 hidden md:inline">até</span>
+                    <input type="time" defaultValue={details?.horaFim || '18:00'} onBlur={e => { setWorkerDetails(workerDetails.map(w => w.user_id === currentUser.id ? { ...w, horaFim: e.target.value } : w)); showToast('Horário final salvo!'); }} className="w-full md:flex-1 px-3 py-2 text-sm rounded-xl border border-gray-300 outline-none focus:border-[#EA1D2C] focus:ring-1 focus:ring-[#EA1D2C]" />
+                  </div>
                 </div>
               </div>
             </div>
