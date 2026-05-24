@@ -30,7 +30,7 @@ export default function SupportWidget() {
   };
 
   return (
-    <div className="fixed bottom-24 md:bottom-6 right-4 md:right-6 z-[9999]">
+    <div className="fixed bottom-28 md:bottom-6 right-3 md:right-6 z-[9999]">
       {isOpen ? (
         <div className="bg-white w-80 rounded-3xl shadow-2xl border border-gray-100 flex flex-col overflow-hidden animate-slide-down h-96">
           <div className="bg-[#EA1D2C] p-4 flex justify-between items-center text-white">
@@ -82,9 +82,9 @@ export default function SupportWidget() {
       ) : (
         <button
           onClick={() => setIsOpen(true)}
-          className="w-14 h-14 bg-[#EA1D2C] text-white rounded-full flex items-center justify-center shadow-lg shadow-red-500/40 hover:scale-110 transition-transform hover:bg-[#c41020] border-2 border-white relative"
+          className="w-12 h-12 md:w-14 md:h-14 bg-[#EA1D2C] text-white rounded-full flex items-center justify-center shadow-lg shadow-red-500/40 hover:scale-110 transition-transform hover:bg-[#c41020] border-2 border-white relative"
         >
-          <i className="ph-fill ph-chat-teardrop-dots text-3xl" />
+          <i className="ph-fill ph-chat-teardrop-dots text-2xl md:text-3xl" />
           {myTicket?.messages.some(m => m.sender === 'ADMIN') && (
             <span className="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
           )}

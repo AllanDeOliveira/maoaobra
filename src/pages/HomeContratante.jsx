@@ -36,34 +36,34 @@ export default function HomeContratante({ onSelectWorker }) {
       {/* HERO */}
       <div className="bg-white border-b border-gray-100 pt-4 pb-8 mb-8 md:rounded-3xl md:shadow-sm md:mt-2">
         <div className="px-4 md:px-8 max-w-4xl mx-auto text-center">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-[#1F2937] mb-4 mt-4">
+          <h1 className="text-2xl md:text-4xl font-extrabold text-[#1F2937] mb-2 md:mb-4 mt-2 md:mt-4 leading-tight">
             Encontre os melhores profissionais.
           </h1>
-          <div className="relative mt-6 shadow-lg shadow-gray-200/50 rounded-2xl">
-            <i className="ph-bold ph-magnifying-glass absolute left-5 top-4 text-gray-400 text-xl" />
+          <div className="relative mt-4 md:mt-6 shadow-lg shadow-gray-200/50 rounded-2xl mx-2 md:mx-0">
+            <i className="ph-bold ph-magnifying-glass absolute left-4 md:left-5 top-3.5 md:top-4 text-gray-400 text-lg md:text-xl" />
             <input
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              placeholder="Busque por nome, categoria ou palavra-chave..."
-              className="w-full pl-14 pr-4 py-4 bg-white border border-gray-200 rounded-2xl font-bold text-lg focus:ring-4 focus:ring-red-100 focus:border-[#EA1D2C] outline-none transition-all"
+              placeholder="Busque nome, categoria..."
+              className="w-full pl-12 md:pl-14 pr-3 py-3 md:py-4 bg-white border border-gray-200 rounded-2xl font-bold text-sm md:text-lg focus:ring-4 focus:ring-red-100 focus:border-[#EA1D2C] outline-none transition-all"
             />
           </div>
         </div>
 
         {/* CATEGORIAS */}
-        <div className="mt-10 px-4 md:px-8 max-w-7xl mx-auto">
-          <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-2 md:flex-wrap md:justify-center">
+        <div className="mt-6 md:mt-10 px-2 md:px-8 max-w-7xl mx-auto">
+          <div className="flex gap-2 md:gap-4 overflow-x-auto hide-scrollbar pb-2 md:flex-wrap md:justify-center">
             {CATEGORIES.map(cat => {
               const isSelected = selectedCategory === cat;
               return (
                 <div key={cat} onClick={() => setSelectedCategory(cat)}
-                  className="flex flex-col items-center gap-3 flex-shrink-0 cursor-pointer group w-20 md:w-28">
-                  <div className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl md:rounded-3xl shadow-sm flex items-center justify-center text-3xl border transition-all duration-300
-                    ${isSelected ? 'bg-[#EA1D2C] text-white border-[#EA1D2C] shadow-lg shadow-red-500/30 scale-110' : 'bg-white text-[#1F2937] border-gray-200 group-hover:border-red-300 group-hover:bg-red-50'}`}>
+                  className="flex flex-col items-center gap-2 md:gap-3 flex-shrink-0 cursor-pointer group w-16 md:w-28">
+                  <div className={`w-14 h-14 md:w-20 md:h-20 rounded-2xl md:rounded-3xl shadow-sm flex items-center justify-center text-2xl md:text-3xl border transition-all duration-300
+                    ${isSelected ? 'bg-[#EA1D2C] text-white border-[#EA1D2C] shadow-md md:shadow-lg shadow-red-500/30 scale-105 md:scale-110' : 'bg-white text-[#1F2937] border-gray-200 group-hover:border-red-300 group-hover:bg-red-50'}`}>
                     <i className={`ph-fill ${CAT_ICONS[cat] || 'ph-squares-four'}`} />
                   </div>
-                  <span className={`text-xs md:text-sm font-bold ${isSelected ? 'text-[#EA1D2C]' : 'text-gray-500'}`}>{cat}</span>
+                  <span className={`text-[10px] md:text-sm font-bold ${isSelected ? 'text-[#EA1D2C]' : 'text-gray-500'}`}>{cat}</span>
                 </div>
               );
             })}
@@ -72,12 +72,12 @@ export default function HomeContratante({ onSelectWorker }) {
       </div>
 
       {/* GRID WORKERS */}
-      <div className="px-4 md:px-8 max-w-7xl mx-auto mb-28">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl md:text-2xl font-extrabold text-[#1F2937]">
+      <div className="px-4 md:px-8 max-w-7xl mx-auto mb-32 md:mb-12">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 md:mb-6 gap-2">
+          <h2 className="text-lg md:text-2xl font-extrabold text-[#1F2937] leading-tight">
             {searchQuery ? `Resultados para "${searchQuery}"` : selectedCategory === 'Todos' ? 'Profissionais em Destaque' : `Profissionais de ${selectedCategory}`}
           </h2>
-          <span className="text-sm font-bold text-gray-400">{filteredWorkers.length} encontrado{filteredWorkers.length !== 1 ? 's' : ''}</span>
+          <span className="text-xs md:text-sm font-bold text-gray-400">{filteredWorkers.length} encontrado{filteredWorkers.length !== 1 ? 's' : ''}</span>
         </div>
 
         {filteredWorkers.length === 0 ? (
