@@ -44,7 +44,8 @@ export default function WorkerProfileDetail({ workerId, onBack }) {
   } catch(e) {}
   
   const finalIsOnline = details?.isOnline && isWithinHours;
-  const workingHoursDisplay = `${horaInicio} às ${horaFim}`;
+  const diasTrabalho = details?.diasTrabalho || details?.workingHours?.split(',')[0] || 'Seg-Sex';
+  const workingHoursDisplay = `${diasTrabalho}, ${horaInicio} às ${horaFim}`;
 
   if (!worker || !details) return null;
 
