@@ -25,10 +25,9 @@ export default function HomeContratante({ onSelectWorker }) {
     if (!myDetails) return 0;
     const dA = workerDetails.find(x => x.user_id === a.id);
     const dB = workerDetails.find(x => x.user_id === b.id);
-    // Same UF prioritizes
-    if (dA?.uf === myDetails.uf && dB?.uf !== myDetails.uf) return -1;
-    if (dA?.uf !== myDetails.uf && dB?.uf === myDetails.uf) return 1;
-    return 0;
+    const distA = parseFloat(getEstimatedDistance(myDetails, dA)) || Infinity;
+    const distB = parseFloat(getEstimatedDistance(myDetails, dB)) || Infinity;
+    return distA - distB;
   });
 
   return (

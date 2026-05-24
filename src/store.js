@@ -53,14 +53,14 @@ const playNotificationSound = (type) => {
 // ==========================================
 const INITIAL_USERS = [
   { id: 'a1', nome: 'Administrador', email: 'legalmano@gmail.com', senha: '123', role: 'ADMIN', foto_perfil_url: 'https://ui-avatars.com/api/?name=Admin&background=ea1d2c&color=fff', telefone: '00000000000', data_criacao: new Date().toISOString(), status: 'APPROVED' },
-  { id: 'w1', nome: 'Allan Eletricista', email: 'allan@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://ui-avatars.com/api/?name=Allan+Eletricista&background=007bff&color=fff', telefone: '(11) 98888-7777', data_criacao: new Date().toISOString(), status: 'APPROVED' },
+  { id: 'w1', nome: 'Eduardo Eletricista', email: 'eduardo@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://ui-avatars.com/api/?name=Eduardo+Eletricista&background=007bff&color=fff', telefone: '(11) 98888-7777', data_criacao: new Date().toISOString(), status: 'APPROVED' },
   { id: 'w2', nome: 'Mario Encanador', email: 'encanador@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://ui-avatars.com/api/?name=Mario+Encanador&background=17a2b8&color=fff', telefone: '(11) 97777-6666', data_criacao: new Date().toISOString(), status: 'APPROVED' },
   { id: 'w3', nome: 'Maria Diarista', email: 'diarista@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://ui-avatars.com/api/?name=Maria+Diarista&background=e83e8c&color=fff', telefone: '(11) 96666-5555', data_criacao: new Date().toISOString(), status: 'APPROVED' },
   { id: 'w4', nome: 'Pablo Pintor', email: 'pintor@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://ui-avatars.com/api/?name=Pablo+Pintor&background=fd7e14&color=fff', telefone: '(11) 95555-4444', data_criacao: new Date().toISOString(), status: 'APPROVED' },
   { id: 'w5', nome: 'Roberto Montador', email: 'montador@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://ui-avatars.com/api/?name=Roberto+Montador&background=6c757d&color=fff', telefone: '(11) 94444-3333', data_criacao: new Date().toISOString(), status: 'APPROVED' },
   { id: 'w6', nome: 'Lucas TI', email: 'ti@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://ui-avatars.com/api/?name=Lucas+TI&background=20c997&color=fff', telefone: '(11) 93333-2222', data_criacao: new Date().toISOString(), status: 'APPROVED' },
   { id: 'w7', nome: 'João Jardineiro', email: 'jardineiro@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://ui-avatars.com/api/?name=Joao+Jardineiro&background=28a745&color=fff', telefone: '(11) 92222-1111', data_criacao: new Date().toISOString(), status: 'APPROVED' },
-  { id: 'c1', nome: 'Vinicius Cliente', email: 'vini@gmail.com', senha: '123', role: 'CONTRATANTE', foto_perfil_url: 'https://ui-avatars.com/api/?name=Vinicius&background=6f42c1&color=fff', telefone: '(11) 99999-1111', data_criacao: new Date().toISOString(), status: 'APPROVED' },
+  { id: 'c1', nome: 'Pedro Cliente', email: 'pedro@gmail.com', senha: '123', role: 'CONTRATANTE', foto_perfil_url: 'https://ui-avatars.com/api/?name=Pedro+Cliente&background=6f42c1&color=fff', telefone: '(11) 99999-1111', data_criacao: new Date().toISOString(), status: 'APPROVED' },
 ];
 
 const INITIAL_WORKER_DETAILS = [
