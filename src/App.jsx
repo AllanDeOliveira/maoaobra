@@ -69,6 +69,7 @@ function AppRouter() {
 
   const hideNav = currentView === 'LOGIN' || currentView === 'REGISTER' || !!selectedWorkerId;
   const navPaddingClass = !hideNav ? (!currentUser ? 'pt-20' : 'md:pt-20') : '';
+  const footerPadding = (!currentUser || hideNav) ? 'pb-6' : 'pb-24 md:pb-6';
 
   let content;
   if (currentView === 'LOGIN')              content = <LoginScreen />;
@@ -105,7 +106,7 @@ function AppRouter() {
 
       <SupportWidget />
 
-      <footer className="bg-white border-t border-gray-100 py-5 text-center px-4 relative z-10 pb-24 md:pb-6">
+      <footer className={`bg-white border-t border-gray-100 py-5 text-center px-4 relative z-10 ${footerPadding}`}>
         <div className="flex flex-col items-center gap-0.5">
           <div className="text-lg font-extrabold tracking-tight">
             <span className="text-[#1F2937]">mão</span>
