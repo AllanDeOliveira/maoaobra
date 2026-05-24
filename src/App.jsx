@@ -68,6 +68,7 @@ function AppRouter() {
   }
 
   const hideNav = currentView === 'LOGIN' || currentView === 'REGISTER' || !!selectedWorkerId;
+  const navPaddingClass = !hideNav ? (!currentUser ? 'pt-20' : 'md:pt-20') : '';
 
   let content;
   if (currentView === 'LOGIN')              content = <LoginScreen />;
@@ -98,7 +99,7 @@ function AppRouter() {
       <Toast />
       {!hideNav && <NavBar />}
 
-      <main className={`flex-1 w-full relative z-10 ${!hideNav ? 'md:pt-20' : ''} pb-4`}>
+      <main className={`flex-1 w-full relative z-10 ${navPaddingClass} pb-4`}>
         {content}
       </main>
 
