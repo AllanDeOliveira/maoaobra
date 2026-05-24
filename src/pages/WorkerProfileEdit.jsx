@@ -138,6 +138,10 @@ export default function WorkerProfileEdit() {
             </div>
           </div>
         </div>
+
+        <button onClick={logout} className="w-full mt-8 bg-red-50 text-red-600 font-extrabold py-4 px-8 rounded-2xl border border-red-100 flex justify-center items-center gap-2 hover:bg-red-100 transition">
+          <i className="ph-bold ph-sign-out text-xl" /> Sair da conta
+        </button>
       </div>
     </div>
   );
