@@ -45,14 +45,14 @@ export default function ImageUploader({ onUploadSuccess, onUploadStart, onError,
 
   return (
     <div className={className}>
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        accept="image/*"
-        className="hidden"
-      />
-      <div onClick={() => !uploading && fileInputRef.current?.click()} className={uploading ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer'}>
+      <label className={uploading ? 'opacity-50 cursor-not-allowed pointer-events-none block' : 'cursor-pointer block'}>
+        <input
+          type="file"
+          onChange={handleFileChange}
+          accept="image/*"
+          className="hidden"
+          disabled={uploading}
+        />
         {uploading ? (
           <div className="flex flex-col items-center justify-center p-2">
             <div className="w-5 h-5 border-2 border-[#EA1D2C] border-t-transparent rounded-full animate-spin mb-1" />
@@ -60,12 +60,12 @@ export default function ImageUploader({ onUploadSuccess, onUploadStart, onError,
           </div>
         ) : (
           children || (
-             <button type="button" className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-gray-200 hover:text-[#1F2937] transition shrink-0 border border-gray-200">
+             <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-gray-200 hover:text-[#1F2937] transition shrink-0 border border-gray-200">
                 <i className="ph-bold ph-image text-xl" />
-             </button>
+             </div>
           )
         )}
-      </div>
+      </label>
     </div>
   );
 }

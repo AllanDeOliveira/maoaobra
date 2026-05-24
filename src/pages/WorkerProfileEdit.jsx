@@ -28,9 +28,9 @@ export default function WorkerProfileEdit() {
               onUploadSuccess={(url) => { setWorkerDetails(workerDetails.map(d => d.user_id === currentUser.id ? { ...d, banner_url: url } : d)); showToast('Banner atualizado!'); }}
               onError={(err) => showToast(err, 'error')}
             >
-              <button className="bg-white/20 hover:bg-white/40 text-white p-2 rounded-xl backdrop-blur transition border border-white/30 text-sm font-bold">
+              <div role="button" className="bg-white/20 hover:bg-white/40 text-white p-2 rounded-xl backdrop-blur transition border border-white/30 text-sm font-bold flex items-center justify-center gap-2">
                 <i className="ph-bold ph-image" /> Alterar Capa
-              </button>
+              </div>
             </ImageUploader>
           </div>
           <div className="p-8 flex flex-col md:flex-row items-center md:items-end gap-6 relative">
@@ -42,9 +42,9 @@ export default function WorkerProfileEdit() {
                 onUploadSuccess={(url) => { setUsers(users.map(u => u.id === currentUser.id ? { ...u, foto_perfil_url: url } : u)); setCurrentUser({ ...currentUser, foto_perfil_url: url }); showToast('Foto atualizada!'); }}
                 onError={(err) => showToast(err, 'error')}
               >
-                <button className="bg-[#EA1D2C] text-white w-10 h-10 flex items-center justify-center rounded-xl shadow-lg hover:bg-[#c41020] transition border-2 border-white">
+                <div role="button" className="bg-[#EA1D2C] text-white w-10 h-10 flex items-center justify-center rounded-xl shadow-lg hover:bg-[#c41020] transition border-2 border-white">
                   <i className="ph-bold ph-pencil-simple text-base" />
-                </button>
+                </div>
               </ImageUploader>
             </div>
             <div className="text-center md:text-left flex-1 mt-4 md:mt-0 pb-2">
