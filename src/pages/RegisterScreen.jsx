@@ -5,7 +5,7 @@ import { useAppStore } from '../store';
 const UF_OPTIONS = ['SP','RJ','MG','RS','BA','PR','SC','GO','ES','DF','AM','PA','CE','PE','MT','MS','RN','AL','PB','PI','SE','TO','MA','AC','RO','RR','AP'];
 
 export default function RegisterScreen() {
-  const { register, setCurrentView } = useAppStore();
+  const { register, setCurrentView, showToast } = useAppStore();
   const [role, setRole] = useState('CONTRATANTE');
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
@@ -20,11 +20,16 @@ export default function RegisterScreen() {
   const [numero, setNumero] = useState('');
   const [bio, setBio] = useState('');
   const [categoria, setCategoria] = useState('Eletricista');
+  const [lgpd, setLgpd] = useState(false);
 
   const inp = "w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#EA1D2C] focus:border-[#EA1D2C] outline-none bg-gray-50 focus:bg-white transition-colors";
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!lgpd) {
+      showToast('Você precisa aceitar a Política de Privacidade e LGPD.', 'error');
+      return;
+    }
     const userData = { nome, email, senha, telefone, role, foto_perfil_url: `https://ui-avatars.com/api/?name=${encodeURIComponent(nome)}&background=ea1d2c&color=fff` };
     const specificData = { cpf, cep, uf, cidade, rua, bairro, numero };
     if (role === 'CONTRATANTE') register(userData, { ...specificData, bio_curta: '' });
@@ -164,6 +169,15 @@ export default function RegisterScreen() {
               </div>
             </Card>
           )}
+
+          {/* LGPD */}
+          <div className="flex items-start gap-3 bg-gray-50 p-5 rounded-2xl border border-gray-200 mt-6">
+            <input type="checkbox" id="lgpd" checked={lgpd} onChange={e => setLgpd(e.target.checked)} className="mt-1 w-5 h-5 accent-[#EA1D2C] cursor-pointer" />
+            <label htmlFor="lgpd" className="text-sm text-gray-600 font-medium cursor-pointer">
+              Declaro que li e concordo com os <b>Termos de Uso e Política de Privacidade</b>. 
+              Ao me cadastrar, aceito que meus dados informados (como nome, endereço e WhatsApp) poderão ser armazenados e exibidos publicamente na plataforma com o objetivo exclusivo de facilitar a conexão entre cliente e prestador de serviços, em conformidade com a <b>Lei Geral de Proteção de Dados (LGPD)</b>.
+            </label>
+          </div>
 
           <button type="submit" className="w-full bg-[#EA1D2C] hover:bg-[#c41020] text-white font-extrabold text-lg py-5 rounded-2xl shadow-lg shadow-red-500/30 mt-8 transition-all transform hover:-translate-y-1">
             {role === 'CONTRATANTE' ? 'Concluir Cadastro de Cliente' : 'Enviar Cadastro para Avaliação'}

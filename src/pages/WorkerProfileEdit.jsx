@@ -90,6 +90,23 @@ export default function WorkerProfileEdit() {
               </div>
             </div>
 
+            {/* Contato */}
+            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100">
+              <h3 className="text-base font-extrabold text-[#1F2937] uppercase flex items-center gap-2 border-b border-gray-100 pb-4 mb-6">
+                <i className="ph-fill ph-phone text-[#EA1D2C]" /> Contato Público
+              </h3>
+              <div className="bg-gray-50 p-4 rounded-2xl border border-gray-200">
+                <div className="font-extrabold text-[#1F2937] text-sm mb-1">WhatsApp</div>
+                <p className="text-xs text-gray-500 mb-3">Este número ficará visível publicamente no seu perfil para os clientes (Lei Geral de Proteção de Dados).</p>
+                <input type="tel" defaultValue={currentUser.telefone} onBlur={e => { 
+                  const novoTel = e.target.value;
+                  setUsers(users.map(u => u.id === currentUser.id ? { ...u, telefone: novoTel } : u));
+                  setCurrentUser({ ...currentUser, telefone: novoTel });
+                  showToast('WhatsApp público atualizado!');
+                }} className="w-full px-3 py-2 text-sm rounded-xl border border-gray-300 outline-none focus:border-[#EA1D2C] focus:ring-1 focus:ring-[#EA1D2C]" placeholder="(11) 90000-0000" />
+              </div>
+            </div>
+
             {/* Bio */}
             <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100">
               <div className="flex justify-between items-center border-b border-gray-100 pb-4 mb-6">
