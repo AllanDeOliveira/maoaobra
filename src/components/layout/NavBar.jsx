@@ -24,6 +24,16 @@ const ADMIN_LINKS = [
 export default function NavBar() {
   const { currentUser, currentView, setCurrentView, logout, orders } = useAppStore();
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
 
   useEffect(() => {
     if (isDark) document.documentElement.classList.add('dark');
@@ -49,9 +59,18 @@ export default function NavBar() {
       <header className="fixed top-0 w-full bg-white border-b border-gray-200 z-50 h-20 px-4 md:px-8 flex items-center justify-between shadow-sm">
         <Logo />
         <div className="flex items-center gap-3">
-          <button onClick={() => setIsDark(!isDark)} className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-500 hover:text-[#EA1D2C] hover:bg-red-50 transition border border-gray-100 mr-2">
+          <button onClick={() => setIsDark(!isDark)} className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-500 hover:text-[#EA1D2C] hover:bg-red-50 transition border border-gray-100 mr-2 md:mr-0">
             <i className={`ph-fill ${isDark ? 'ph-moon' : 'ph-sun'} text-lg`} />
           </button>
+          {deferredPrompt && (
+            <button onClick={async () => {
+              deferredPrompt.prompt();
+              const { outcome } = await deferredPrompt.userChoice;
+              if (outcome === 'accepted') setDeferredPrompt(null);
+            }} className="flex items-center gap-1 md:gap-2 bg-green-500 text-white font-extrabold px-3 md:px-4 py-2 rounded-xl hover:bg-green-600 shadow-sm transition mr-1 md:mr-2 text-xs md:text-sm">
+              <i className="ph-bold ph-download-simple" /> <span className="hidden md:inline">Instalar App</span><span className="md:hidden">Instalar</span>
+            </button>
+          )}
           <button onClick={() => setCurrentView('REGISTER')} className="hidden md:block font-bold text-gray-600 hover:text-[#EA1D2C] px-4 py-2 transition">Criar Conta</button>
           <button onClick={() => setCurrentView('LOGIN')} className="bg-[#EA1D2C] text-white font-extrabold px-6 py-2.5 rounded-xl hover:bg-[#c41020] shadow-md shadow-red-500/20 transition">Entrar</button>
         </div>
