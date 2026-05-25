@@ -24,15 +24,15 @@ const ADMIN_LINKS = [
 export default function NavBar() {
   const { currentUser, currentView, setCurrentView, logout, orders } = useAppStore();
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
-  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [deferredPrompt, setDeferredPrompt] = useState(window.deferredPwaPrompt || null);
 
   useEffect(() => {
-    const handler = (e) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
+    const handler = () => {
+      setDeferredPrompt(window.deferredPwaPrompt);
     };
-    window.addEventListener('beforeinstallprompt', handler);
-    return () => window.removeEventListener('beforeinstallprompt', handler);
+    if (window.deferredPwaPrompt) setDeferredPrompt(window.deferredPwaPrompt);
+    window.addEventListener('pwa-ready', handler);
+    return () => window.removeEventListener('pwa-ready', handler);
   }, []);
 
   useEffect(() => {
