@@ -56,10 +56,10 @@ const INITIAL_USERS = [
   { id: 'w1', nome: 'Eduardo Eletricista', email: 'eduardo@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=400&h=400&fit=crop', telefone: '(11) 98888-7777', data_criacao: new Date().toISOString(), status: 'APPROVED' },
   { id: 'w2', nome: 'Mario Encanador', email: 'encanador@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1540569014015-19a7be504e3a?w=400&h=400&fit=crop', telefone: '(11) 97777-6666', data_criacao: new Date().toISOString(), status: 'APPROVED' },
   { id: 'w3', nome: 'Maria Diarista', email: 'diarista@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&h=400&fit=crop', telefone: '(11) 96666-5555', data_criacao: new Date().toISOString(), status: 'APPROVED' },
-  { id: 'w4', nome: 'Pablo Pintor', email: 'pintor@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1506804886640-3796cdbe0335?w=400&h=400&fit=crop', telefone: '(11) 95555-4444', data_criacao: new Date().toISOString(), status: 'APPROVED' },
+  { id: 'w4', nome: 'Pablo Pintor', email: 'pintor@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=400&h=400&fit=crop', telefone: '(11) 95555-4444', data_criacao: new Date().toISOString(), status: 'APPROVED' },
   { id: 'w5', nome: 'Roberto Montador', email: 'montador@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop', telefone: '(11) 94444-3333', data_criacao: new Date().toISOString(), status: 'APPROVED' },
   { id: 'w6', nome: 'Lucas TI', email: 'ti@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=400&h=400&fit=crop', telefone: '(11) 93333-2222', data_criacao: new Date().toISOString(), status: 'APPROVED' },
-  { id: 'w7', nome: 'João Jardineiro', email: 'jardineiro@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1595346065584-6997b6cbdbbb?w=400&h=400&fit=crop', telefone: '(11) 92222-1111', data_criacao: new Date().toISOString(), status: 'APPROVED' },
+  { id: 'w7', nome: 'João Jardineiro', email: 'jardineiro@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1416879598466-0bf32a514d02?w=400&h=400&fit=crop', telefone: '(11) 92222-1111', data_criacao: new Date().toISOString(), status: 'APPROVED' },
   { id: 'c1', nome: 'Pedro Cliente', email: 'pedro@gmail.com', senha: '123', role: 'CONTRATANTE', foto_perfil_url: 'https://ui-avatars.com/api/?name=Pedro+Cliente&background=6f42c1&color=fff', telefone: '(11) 99999-1111', data_criacao: new Date().toISOString(), status: 'APPROVED' },
 ];
 
@@ -79,39 +79,39 @@ const INITIAL_CONTRATANTE_DETAILS = [
 
 const INITIAL_SERVICES = [
   // w1 Eletricista
-  { id: 's1', worker_id: 'w1', titulo: 'Instalação de Chuveiro 220v/110v', descricao: 'Instalação completa e segura com conectores de porcelana.', preco_base: 80, tempo_estimado: '1h', imagem_url: '' },
-  { id: 's1_2', worker_id: 'w1', titulo: 'Troca de Fiação (por cômodo)', descricao: 'Substituição de fios antigos por cabos modernos para evitar incêndios.', preco_base: 150, tempo_estimado: '3h', imagem_url: '' },
-  { id: 's1_3', worker_id: 'w1', titulo: 'Instalação de Ventilador de Teto', descricao: 'Montagem mecânica e elétrica do ventilador.', preco_base: 120, tempo_estimado: '2h', imagem_url: '' },
+  { id: 's1', worker_id: 'w1', titulo: 'Instalação de Chuveiro 220v/110v', descricao: 'Instalação completa e segura com conectores de porcelana.', preco_base: 80, tempo_estimado: '1h', imagem_url: 'https://images.unsplash.com/photo-1585255476311-dfabec4bbff7?w=600&h=400&fit=crop' },
+  { id: 's1_2', worker_id: 'w1', titulo: 'Troca de Fiação (por cômodo)', descricao: 'Substituição de fios antigos por cabos modernos para evitar incêndios.', preco_base: 150, tempo_estimado: '3h', imagem_url: 'https://images.unsplash.com/photo-1621905251918-48416bd8af50?w=600&h=400&fit=crop' },
+  { id: 's1_3', worker_id: 'w1', titulo: 'Instalação de Ventilador de Teto', descricao: 'Montagem mecânica e elétrica do ventilador.', preco_base: 120, tempo_estimado: '2h', imagem_url: 'https://images.unsplash.com/photo-1527344941323-ebc02dc21eb8?w=600&h=400&fit=crop' },
   
   // w2 Encanador
-  { id: 's2', worker_id: 'w2', titulo: 'Caça Vazamentos Ocultos', descricao: 'Uso de aparelhos para detectar vazamentos nas paredes sem quebrar nada à toa.', preco_base: 180, tempo_estimado: '2h', imagem_url: '' },
-  { id: 's2_2', worker_id: 'w2', titulo: 'Desentupimento de Pia/Ralo', descricao: 'Remoção de sujeira e gordura das tubulações.', preco_base: 100, tempo_estimado: '1h', imagem_url: '' },
-  { id: 's2_3', worker_id: 'w2', titulo: 'Limpeza de Caixa D\'Água', descricao: 'Higienização completa seguindo padrões de saúde.', preco_base: 150, tempo_estimado: '2h', imagem_url: '' },
+  { id: 's2', worker_id: 'w2', titulo: 'Caça Vazamentos Ocultos', descricao: 'Uso de aparelhos para detectar vazamentos nas paredes sem quebrar nada à toa.', preco_base: 180, tempo_estimado: '2h', imagem_url: 'https://images.unsplash.com/photo-1505798577917-a65157d3320a?w=600&h=400&fit=crop' },
+  { id: 's2_2', worker_id: 'w2', titulo: 'Desentupimento de Pia/Ralo', descricao: 'Remoção de sujeira e gordura das tubulações.', preco_base: 100, tempo_estimado: '1h', imagem_url: 'https://images.unsplash.com/photo-1585058177435-01e4a6435f33?w=600&h=400&fit=crop' },
+  { id: 's2_3', worker_id: 'w2', titulo: 'Limpeza de Caixa D\'Água', descricao: 'Higienização completa seguindo padrões de saúde.', preco_base: 150, tempo_estimado: '2h', imagem_url: 'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=600&h=400&fit=crop' },
 
   // w3 Diarista
-  { id: 's3', worker_id: 'w3', titulo: 'Faxina Completa Residencial', descricao: 'Limpeza de todos os cômodos, varrição e passar pano.', preco_base: 130, tempo_estimado: '8h', imagem_url: '' },
-  { id: 's3_2', worker_id: 'w3', titulo: 'Faxina Pós-Obra', descricao: 'Limpeza pesada de respingos de tinta e poeira fina.', preco_base: 250, tempo_estimado: '1 dia', imagem_url: '' },
-  { id: 's3_3', worker_id: 'w3', titulo: 'Organização de Guarda-Roupas', descricao: 'Dobras padronizadas e organização por cor.', preco_base: 90, tempo_estimado: '4h', imagem_url: '' },
+  { id: 's3', worker_id: 'w3', titulo: 'Faxina Completa Residencial', descricao: 'Limpeza de todos os cômodos, varrição e passar pano.', preco_base: 130, tempo_estimado: '8h', imagem_url: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&h=400&fit=crop' },
+  { id: 's3_2', worker_id: 'w3', titulo: 'Faxina Pós-Obra', descricao: 'Limpeza pesada de respingos de tinta e poeira fina.', preco_base: 250, tempo_estimado: '1 dia', imagem_url: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=600&h=400&fit=crop' },
+  { id: 's3_3', worker_id: 'w3', titulo: 'Organização de Guarda-Roupas', descricao: 'Dobras padronizadas e organização por cor.', preco_base: 90, tempo_estimado: '4h', imagem_url: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&h=400&fit=crop' },
 
   // w4 Pintor
-  { id: 's4', worker_id: 'w4', titulo: 'Pintura de Fachada', descricao: 'Pintura externa com tinta impermeabilizante.', preco_base: 500, tempo_estimado: '2 dias', imagem_url: '' },
-  { id: 's4_2', worker_id: 'w4', titulo: 'Aplicação de Grafiato/Textura', descricao: 'Trabalho artístico na parede (valor por m²).', preco_base: 35, tempo_estimado: '1h', imagem_url: '' },
-  { id: 's4_3', worker_id: 'w4', titulo: 'Pintura Interna Padrão', descricao: 'Mão de obra para pintura lisa de ambientes internos (por cômodo).', preco_base: 200, tempo_estimado: '1 dia', imagem_url: '' },
+  { id: 's4', worker_id: 'w4', titulo: 'Pintura de Fachada', descricao: 'Pintura externa com tinta impermeabilizante.', preco_base: 500, tempo_estimado: '2 dias', imagem_url: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=600&h=400&fit=crop' },
+  { id: 's4_2', worker_id: 'w4', titulo: 'Aplicação de Grafiato/Textura', descricao: 'Trabalho artístico na parede (valor por m²).', preco_base: 35, tempo_estimado: '1h', imagem_url: 'https://images.unsplash.com/photo-1562259929-b7e181d8d007?w=600&h=400&fit=crop' },
+  { id: 's4_3', worker_id: 'w4', titulo: 'Pintura Interna Padrão', descricao: 'Mão de obra para pintura lisa de ambientes internos (por cômodo).', preco_base: 200, tempo_estimado: '1 dia', imagem_url: 'https://images.unsplash.com/photo-1562259924-f7dfbb4787a4?w=600&h=400&fit=crop' },
 
   // w5 Montador
-  { id: 's5', worker_id: 'w5', titulo: 'Montagem de Guarda-Roupa Grande', descricao: 'Montagem de roupeiros de até 6 portas.', preco_base: 150, tempo_estimado: '4h', imagem_url: '' },
-  { id: 's5_2', worker_id: 'w5', titulo: 'Instalação de Painel de TV', descricao: 'Montagem do painel e fixação segura da TV na parede.', preco_base: 120, tempo_estimado: '2h', imagem_url: '' },
-  { id: 's5_3', worker_id: 'w5', titulo: 'Desmontagem de Móveis para Mudança', descricao: 'Desmontagem cuidadosa embalando parafusos.', preco_base: 80, tempo_estimado: '2h', imagem_url: '' },
+  { id: 's5', worker_id: 'w5', titulo: 'Montagem de Guarda-Roupa Grande', descricao: 'Montagem de roupeiros de até 6 portas.', preco_base: 150, tempo_estimado: '4h', imagem_url: 'https://images.unsplash.com/photo-1581428982868-e410dd4b1a6c?w=600&h=400&fit=crop' },
+  { id: 's5_2', worker_id: 'w5', titulo: 'Instalação de Painel de TV', descricao: 'Montagem do painel e fixação segura da TV na parede.', preco_base: 120, tempo_estimado: '2h', imagem_url: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=600&h=400&fit=crop' },
+  { id: 's5_3', worker_id: 'w5', titulo: 'Desmontagem de Móveis para Mudança', descricao: 'Desmontagem cuidadosa embalando parafusos.', preco_base: 80, tempo_estimado: '2h', imagem_url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=400&fit=crop' },
 
   // w6 TI
-  { id: 's6', worker_id: 'w6', titulo: 'Formatação de PC / Notebook', descricao: 'Instalação limpa do Windows + Office + Antivírus.', preco_base: 100, tempo_estimado: '2h', imagem_url: '' },
-  { id: 's6_2', worker_id: 'w6', titulo: 'Limpeza Interna de Notebook', descricao: 'Troca de pasta térmica e limpeza dos coolers.', preco_base: 120, tempo_estimado: '2h', imagem_url: '' },
-  { id: 's6_3', worker_id: 'w6', titulo: 'Configuração de Roteador Wi-Fi', descricao: 'Configuração de redes, senhas e repetidores de sinal.', preco_base: 70, tempo_estimado: '1h', imagem_url: '' },
+  { id: 's6', worker_id: 'w6', titulo: 'Formatação de PC / Notebook', descricao: 'Instalação limpa do Windows + Office + Antivírus.', preco_base: 100, tempo_estimado: '2h', imagem_url: 'https://images.unsplash.com/photo-1593640495253-23196b27a87f?w=600&h=400&fit=crop' },
+  { id: 's6_2', worker_id: 'w6', titulo: 'Limpeza Interna de Notebook', descricao: 'Troca de pasta térmica e limpeza dos coolers.', preco_base: 120, tempo_estimado: '2h', imagem_url: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&h=400&fit=crop' },
+  { id: 's6_3', worker_id: 'w6', titulo: 'Configuração de Roteador Wi-Fi', descricao: 'Configuração de redes, senhas e repetidores de sinal.', preco_base: 70, tempo_estimado: '1h', imagem_url: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=600&h=400&fit=crop' },
 
   // w7 Jardineiro
-  { id: 's7', worker_id: 'w7', titulo: 'Roçagem de Terrenos', descricao: 'Limpeza de mato alto em lotes e terrenos (valor inicial).', preco_base: 150, tempo_estimado: '3h', imagem_url: '' },
-  { id: 's7_2', worker_id: 'w7', titulo: 'Manutenção de Gramado', descricao: 'Corte de grama com máquina, acabamento e adubação.', preco_base: 90, tempo_estimado: '2h', imagem_url: '' },
-  { id: 's7_3', worker_id: 'w7', titulo: 'Poda de Árvores Frutíferas', descricao: 'Poda direcionada para aumentar a produção de frutos.', preco_base: 80, tempo_estimado: '2h', imagem_url: '' },
+  { id: 's7', worker_id: 'w7', titulo: 'Roçagem de Terrenos', descricao: 'Limpeza de mato alto em lotes e terrenos (valor inicial).', preco_base: 150, tempo_estimado: '3h', imagem_url: 'https://images.unsplash.com/photo-1558904541-efa843a96f09?w=600&h=400&fit=crop' },
+  { id: 's7_2', worker_id: 'w7', titulo: 'Manutenção de Gramado', descricao: 'Corte de grama com máquina, acabamento e adubação.', preco_base: 90, tempo_estimado: '2h', imagem_url: 'https://images.unsplash.com/photo-1589923188900-85dae523342b?w=600&h=400&fit=crop' },
+  { id: 's7_3', worker_id: 'w7', titulo: 'Poda de Árvores Frutíferas', descricao: 'Poda direcionada para aumentar a produção de frutos.', preco_base: 80, tempo_estimado: '2h', imagem_url: 'https://images.unsplash.com/photo-1591857177580-dc82b9ac4e1e?w=600&h=400&fit=crop' },
 ];
 
 // ==========================================
@@ -135,13 +135,13 @@ export const useAppStore = create((set, get) => ({
   toast: null,
 
   // ---- SETTERS COM PERSISTÊNCIA FIREBASE ----
-  setUsers: (v) => { set({ users: v }); saveToFirebase('maos_v8_users', v); },
-  setWorkerDetails: (v) => { set({ workerDetails: v }); saveToFirebase('maos_v8_worker_details', v); },
-  setContratanteDetails: (v) => { set({ contratanteDetails: v }); saveToFirebase('maos_v8_contratante_details', v); },
-  setServices: (v) => { set({ services: v }); saveToFirebase('maos_v8_services', v); },
-  setOrders: (v) => { set({ orders: v }); saveToFirebase('maos_v8_orders', v); },
-  setReviews: (v) => { set({ reviews: v }); saveToFirebase('maos_v8_reviews', v); },
-  setSupportTickets: (v) => { set({ supportTickets: v }); saveToFirebase('maos_v8_support_tickets', v); },
+  setUsers: (v) => { set({ users: v }); saveToFirebase('maos_v9_users', v); },
+  setWorkerDetails: (v) => { set({ workerDetails: v }); saveToFirebase('maos_v9_worker_details', v); },
+  setContratanteDetails: (v) => { set({ contratanteDetails: v }); saveToFirebase('maos_v9_contratante_details', v); },
+  setServices: (v) => { set({ services: v }); saveToFirebase('maos_v9_services', v); },
+  setOrders: (v) => { set({ orders: v }); saveToFirebase('maos_v9_orders', v); },
+  setReviews: (v) => { set({ reviews: v }); saveToFirebase('maos_v9_reviews', v); },
+  setSupportTickets: (v) => { set({ supportTickets: v }); saveToFirebase('maos_v9_support_tickets', v); },
 
   setCurrentView: (view) => {
     set({ currentView: view, selectedWorkerId: null, selectedClientId: null });
@@ -225,12 +225,12 @@ export const useAppStore = create((set, get) => ({
       if (loadedCount === 7) set({ isLoaded: true });
     };
 
-    syncWithFirebase('maos_v8_users', INITIAL_USERS, (data) => { set({ users: data }); checkLoaded(); });
-    syncWithFirebase('maos_v8_worker_details', INITIAL_WORKER_DETAILS, (data) => { set({ workerDetails: data }); checkLoaded(); });
-    syncWithFirebase('maos_v8_contratante_details', INITIAL_CONTRATANTE_DETAILS, (data) => { set({ contratanteDetails: data }); checkLoaded(); });
-    syncWithFirebase('maos_v8_services', INITIAL_SERVICES, (data) => { set({ services: data }); checkLoaded(); });
-    syncWithFirebase('maos_v8_orders', [], (data) => { set({ orders: data }); checkLoaded(); });
-    syncWithFirebase('maos_v8_reviews', [], (data) => { set({ reviews: data }); checkLoaded(); });
-    syncWithFirebase('maos_v8_support_tickets', [], (data) => { set({ supportTickets: data }); checkLoaded(); });
+    syncWithFirebase('maos_v9_users', INITIAL_USERS, (data) => { set({ users: data }); checkLoaded(); });
+    syncWithFirebase('maos_v9_worker_details', INITIAL_WORKER_DETAILS, (data) => { set({ workerDetails: data }); checkLoaded(); });
+    syncWithFirebase('maos_v9_contratante_details', INITIAL_CONTRATANTE_DETAILS, (data) => { set({ contratanteDetails: data }); checkLoaded(); });
+    syncWithFirebase('maos_v9_services', INITIAL_SERVICES, (data) => { set({ services: data }); checkLoaded(); });
+    syncWithFirebase('maos_v9_orders', [], (data) => { set({ orders: data }); checkLoaded(); });
+    syncWithFirebase('maos_v9_reviews', [], (data) => { set({ reviews: data }); checkLoaded(); });
+    syncWithFirebase('maos_v9_support_tickets', [], (data) => { set({ supportTickets: data }); checkLoaded(); });
   }
 }));
