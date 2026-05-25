@@ -53,24 +53,24 @@ const playNotificationSound = (type) => {
 // ==========================================
 const INITIAL_USERS = [
   { id: 'a1', nome: 'Administrador', email: 'legalmano@gmail.com', senha: '123', role: 'ADMIN', foto_perfil_url: 'https://ui-avatars.com/api/?name=Admin&background=ea1d2c&color=fff', telefone: '00000000000', data_criacao: new Date().toISOString(), status: 'APPROVED' },
-  { id: 'w1', nome: 'Eduardo Eletricista', email: 'eduardo@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://ui-avatars.com/api/?name=Eduardo+Eletricista&background=007bff&color=fff', telefone: '(11) 98888-7777', data_criacao: new Date().toISOString(), status: 'APPROVED' },
-  { id: 'w2', nome: 'Mario Encanador', email: 'encanador@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://ui-avatars.com/api/?name=Mario+Encanador&background=17a2b8&color=fff', telefone: '(11) 97777-6666', data_criacao: new Date().toISOString(), status: 'APPROVED' },
-  { id: 'w3', nome: 'Maria Diarista', email: 'diarista@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://ui-avatars.com/api/?name=Maria+Diarista&background=e83e8c&color=fff', telefone: '(11) 96666-5555', data_criacao: new Date().toISOString(), status: 'APPROVED' },
-  { id: 'w4', nome: 'Pablo Pintor', email: 'pintor@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://ui-avatars.com/api/?name=Pablo+Pintor&background=fd7e14&color=fff', telefone: '(11) 95555-4444', data_criacao: new Date().toISOString(), status: 'APPROVED' },
-  { id: 'w5', nome: 'Roberto Montador', email: 'montador@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://ui-avatars.com/api/?name=Roberto+Montador&background=6c757d&color=fff', telefone: '(11) 94444-3333', data_criacao: new Date().toISOString(), status: 'APPROVED' },
-  { id: 'w6', nome: 'Lucas TI', email: 'ti@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://ui-avatars.com/api/?name=Lucas+TI&background=20c997&color=fff', telefone: '(11) 93333-2222', data_criacao: new Date().toISOString(), status: 'APPROVED' },
-  { id: 'w7', nome: 'João Jardineiro', email: 'jardineiro@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://ui-avatars.com/api/?name=Joao+Jardineiro&background=28a745&color=fff', telefone: '(11) 92222-1111', data_criacao: new Date().toISOString(), status: 'APPROVED' },
+  { id: 'w1', nome: 'Eduardo Eletricista', email: 'eduardo@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=400&h=400&fit=crop', telefone: '(11) 98888-7777', data_criacao: new Date().toISOString(), status: 'APPROVED' },
+  { id: 'w2', nome: 'Mario Encanador', email: 'encanador@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1540569014015-19a7be504e3a?w=400&h=400&fit=crop', telefone: '(11) 97777-6666', data_criacao: new Date().toISOString(), status: 'APPROVED' },
+  { id: 'w3', nome: 'Maria Diarista', email: 'diarista@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&h=400&fit=crop', telefone: '(11) 96666-5555', data_criacao: new Date().toISOString(), status: 'APPROVED' },
+  { id: 'w4', nome: 'Pablo Pintor', email: 'pintor@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1506804886640-3796cdbe0335?w=400&h=400&fit=crop', telefone: '(11) 95555-4444', data_criacao: new Date().toISOString(), status: 'APPROVED' },
+  { id: 'w5', nome: 'Roberto Montador', email: 'montador@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop', telefone: '(11) 94444-3333', data_criacao: new Date().toISOString(), status: 'APPROVED' },
+  { id: 'w6', nome: 'Lucas TI', email: 'ti@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=400&h=400&fit=crop', telefone: '(11) 93333-2222', data_criacao: new Date().toISOString(), status: 'APPROVED' },
+  { id: 'w7', nome: 'João Jardineiro', email: 'jardineiro@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1595346065584-6997b6cbdbbb?w=400&h=400&fit=crop', telefone: '(11) 92222-1111', data_criacao: new Date().toISOString(), status: 'APPROVED' },
   { id: 'c1', nome: 'Pedro Cliente', email: 'pedro@gmail.com', senha: '123', role: 'CONTRATANTE', foto_perfil_url: 'https://ui-avatars.com/api/?name=Pedro+Cliente&background=6f42c1&color=fff', telefone: '(11) 99999-1111', data_criacao: new Date().toISOString(), status: 'APPROVED' },
 ];
 
 const INITIAL_WORKER_DETAILS = [
-  { user_id: 'w1', bio: 'Especialista em instalações elétricas.', categorias: ['Eletricista'], nota_media: 4.9, portfolio_fotos: [], cpf: '123.456.789-00', cep: '78200-000', rua: 'Rua Principal', numero: '100', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sex, 08:00 às 18:00' },
-  { user_id: 'w2', bio: 'Resolvo qualquer vazamento ou problema hidráulico.', categorias: ['Encanador'], nota_media: 4.8, portfolio_fotos: [], cpf: '223.456.789-00', cep: '78200-000', rua: 'Rua das Águas', numero: '200', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sex, 08:00 às 18:00' },
-  { user_id: 'w3', bio: 'Limpeza pesada e organização com dedicação.', categorias: ['Diarista'], nota_media: 5.0, portfolio_fotos: [], cpf: '323.456.789-00', cep: '78200-000', rua: 'Rua da Limpeza', numero: '300', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sab, 07:00 às 17:00' },
-  { user_id: 'w4', bio: 'Pinturas residenciais e comerciais com acabamento fino.', categorias: ['Pintor'], nota_media: 4.7, portfolio_fotos: [], cpf: '423.456.789-00', cep: '78200-000', rua: 'Avenida das Cores', numero: '400', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: false, workingHours: 'Seg-Sex, 08:00 às 18:00' },
-  { user_id: 'w5', bio: 'Montagem e desmontagem de móveis de qualquer marca.', categorias: ['Montador'], nota_media: 4.6, portfolio_fotos: [], cpf: '523.456.789-00', cep: '78200-000', rua: 'Rua da Madeira', numero: '500', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sex, 08:00 às 18:00' },
-  { user_id: 'w6', bio: 'Formatação, manutenção e montagem de computadores.', categorias: ['TI'], nota_media: 4.9, portfolio_fotos: [], cpf: '623.456.789-00', cep: '78200-000', rua: 'Rua dos Bits', numero: '600', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sex, 09:00 às 19:00' },
-  { user_id: 'w7', bio: 'Corte de grama, poda de árvores e paisagismo.', categorias: ['Jardineiro'], nota_media: 4.8, portfolio_fotos: [], cpf: '723.456.789-00', cep: '78200-000', rua: 'Rua das Plantas', numero: '700', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sab, 06:00 às 16:00' },
+  { user_id: 'w1', bio: 'Olá! Sou o Eduardo, eletricista com mais de 10 anos de experiência em instalações residenciais e prediais. Faço desde pequenas trocas de tomadas até quadros de distribuição complexos. Trabalho com segurança e sigo as normas técnicas (NBR 5410).', categorias: ['Eletricista'], nota_media: 4.9, portfolio_fotos: [], cpf: '123.456.789-00', cep: '78200-000', rua: 'Rua Principal', numero: '100', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sex, 08:00 às 18:00' },
+  { user_id: 'w2', bio: 'Encanador profissional. Resolvo vazamentos, faço instalação de tubulações de água fria e quente, limpeza de caixa d\'água e desentupimento. Meu diferencial é a limpeza e agilidade no serviço.', categorias: ['Encanador'], nota_media: 4.8, portfolio_fotos: [], cpf: '223.456.789-00', cep: '78200-000', rua: 'Rua das Águas', numero: '200', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sex, 08:00 às 18:00' },
+  { user_id: 'w3', bio: 'Diarista caprichosa, detalhista e de confiança. Faço faxinas pesadas, limpeza pós-obra, e organização de armários. Deixo sua casa brilhando com produtos adequados para cada superfície.', categorias: ['Diarista'], nota_media: 5.0, portfolio_fotos: [], cpf: '323.456.789-00', cep: '78200-000', rua: 'Rua da Limpeza', numero: '300', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sab, 07:00 às 17:00' },
+  { user_id: 'w4', bio: 'Pintor com especialidade em texturas, grafiato, pintura lisa e epóxi. Transformo o visual da sua casa protegendo seus móveis e chão. Garantia de acabamento liso e sem manchas.', categorias: ['Pintor'], nota_media: 4.7, portfolio_fotos: [], cpf: '423.456.789-00', cep: '78200-000', rua: 'Avenida das Cores', numero: '400', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: false, workingHours: 'Seg-Sex, 08:00 às 18:00' },
+  { user_id: 'w5', bio: 'Montador de móveis experiente. Trago minhas próprias ferramentas e cuido das suas peças para não arranhar. Monto desde guarda-roupas enormes até painéis de TV com suporte embutido.', categorias: ['Montador'], nota_media: 4.6, portfolio_fotos: [], cpf: '523.456.789-00', cep: '78200-000', rua: 'Rua da Madeira', numero: '500', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sex, 08:00 às 18:00' },
+  { user_id: 'w6', bio: 'Técnico de Informática (TI) com paixão por hardware e software. Removo vírus, formato computadores, configuro redes Wi-Fi empresariais e faço upgrade de SSD e Memória RAM na sua casa.', categorias: ['TI'], nota_media: 4.9, portfolio_fotos: [], cpf: '623.456.789-00', cep: '78200-000', rua: 'Rua dos Bits', numero: '600', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sex, 09:00 às 19:00' },
+  { user_id: 'w7', bio: 'Jardineiro e paisagista. Adoro o que faço! Faço manutenção de gramados, poda de árvores de pequeno e médio porte, controle de pragas, adubação e criação de canteiros ornamentais.', categorias: ['Jardineiro'], nota_media: 4.8, portfolio_fotos: [], cpf: '723.456.789-00', cep: '78200-000', rua: 'Rua das Plantas', numero: '700', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sab, 06:00 às 16:00' },
 ];
 
 const INITIAL_CONTRATANTE_DETAILS = [
@@ -78,13 +78,40 @@ const INITIAL_CONTRATANTE_DETAILS = [
 ];
 
 const INITIAL_SERVICES = [
-  { id: 's1', worker_id: 'w1', titulo: 'Instalação de Chuveiro', descricao: 'Instalação completa.', preco_base: 80, tempo_estimado: '1h', imagem_url: '' },
-  { id: 's2', worker_id: 'w2', titulo: 'Reparo de Infiltração', descricao: 'Busca e reparo de vazamentos.', preco_base: 150, tempo_estimado: '2h', imagem_url: '' },
-  { id: 's3', worker_id: 'w3', titulo: 'Faxina Completa', descricao: 'Limpeza de todos os cômodos.', preco_base: 120, tempo_estimado: '8h', imagem_url: '' },
-  { id: 's4', worker_id: 'w4', titulo: 'Pintura de Fachada', descricao: 'Pintura externa, inclui lixamento.', preco_base: 500, tempo_estimado: '2 dias', imagem_url: '' },
-  { id: 's5', worker_id: 'w5', titulo: 'Montagem de Guarda-Roupa', descricao: 'Montagem de armários grandes.', preco_base: 100, tempo_estimado: '3h', imagem_url: '' },
-  { id: 's6', worker_id: 'w6', titulo: 'Formatação de PC', descricao: 'Backup e instalação do Windows.', preco_base: 90, tempo_estimado: '2h', imagem_url: '' },
-  { id: 's7', worker_id: 'w7', titulo: 'Poda de Jardim', descricao: 'Poda de arbustos e árvores pequenas.', preco_base: 80, tempo_estimado: '2h', imagem_url: '' },
+  // w1 Eletricista
+  { id: 's1', worker_id: 'w1', titulo: 'Instalação de Chuveiro 220v/110v', descricao: 'Instalação completa e segura com conectores de porcelana.', preco_base: 80, tempo_estimado: '1h', imagem_url: '' },
+  { id: 's1_2', worker_id: 'w1', titulo: 'Troca de Fiação (por cômodo)', descricao: 'Substituição de fios antigos por cabos modernos para evitar incêndios.', preco_base: 150, tempo_estimado: '3h', imagem_url: '' },
+  { id: 's1_3', worker_id: 'w1', titulo: 'Instalação de Ventilador de Teto', descricao: 'Montagem mecânica e elétrica do ventilador.', preco_base: 120, tempo_estimado: '2h', imagem_url: '' },
+  
+  // w2 Encanador
+  { id: 's2', worker_id: 'w2', titulo: 'Caça Vazamentos Ocultos', descricao: 'Uso de aparelhos para detectar vazamentos nas paredes sem quebrar nada à toa.', preco_base: 180, tempo_estimado: '2h', imagem_url: '' },
+  { id: 's2_2', worker_id: 'w2', titulo: 'Desentupimento de Pia/Ralo', descricao: 'Remoção de sujeira e gordura das tubulações.', preco_base: 100, tempo_estimado: '1h', imagem_url: '' },
+  { id: 's2_3', worker_id: 'w2', titulo: 'Limpeza de Caixa D\'Água', descricao: 'Higienização completa seguindo padrões de saúde.', preco_base: 150, tempo_estimado: '2h', imagem_url: '' },
+
+  // w3 Diarista
+  { id: 's3', worker_id: 'w3', titulo: 'Faxina Completa Residencial', descricao: 'Limpeza de todos os cômodos, varrição e passar pano.', preco_base: 130, tempo_estimado: '8h', imagem_url: '' },
+  { id: 's3_2', worker_id: 'w3', titulo: 'Faxina Pós-Obra', descricao: 'Limpeza pesada de respingos de tinta e poeira fina.', preco_base: 250, tempo_estimado: '1 dia', imagem_url: '' },
+  { id: 's3_3', worker_id: 'w3', titulo: 'Organização de Guarda-Roupas', descricao: 'Dobras padronizadas e organização por cor.', preco_base: 90, tempo_estimado: '4h', imagem_url: '' },
+
+  // w4 Pintor
+  { id: 's4', worker_id: 'w4', titulo: 'Pintura de Fachada', descricao: 'Pintura externa com tinta impermeabilizante.', preco_base: 500, tempo_estimado: '2 dias', imagem_url: '' },
+  { id: 's4_2', worker_id: 'w4', titulo: 'Aplicação de Grafiato/Textura', descricao: 'Trabalho artístico na parede (valor por m²).', preco_base: 35, tempo_estimado: '1h', imagem_url: '' },
+  { id: 's4_3', worker_id: 'w4', titulo: 'Pintura Interna Padrão', descricao: 'Mão de obra para pintura lisa de ambientes internos (por cômodo).', preco_base: 200, tempo_estimado: '1 dia', imagem_url: '' },
+
+  // w5 Montador
+  { id: 's5', worker_id: 'w5', titulo: 'Montagem de Guarda-Roupa Grande', descricao: 'Montagem de roupeiros de até 6 portas.', preco_base: 150, tempo_estimado: '4h', imagem_url: '' },
+  { id: 's5_2', worker_id: 'w5', titulo: 'Instalação de Painel de TV', descricao: 'Montagem do painel e fixação segura da TV na parede.', preco_base: 120, tempo_estimado: '2h', imagem_url: '' },
+  { id: 's5_3', worker_id: 'w5', titulo: 'Desmontagem de Móveis para Mudança', descricao: 'Desmontagem cuidadosa embalando parafusos.', preco_base: 80, tempo_estimado: '2h', imagem_url: '' },
+
+  // w6 TI
+  { id: 's6', worker_id: 'w6', titulo: 'Formatação de PC / Notebook', descricao: 'Instalação limpa do Windows + Office + Antivírus.', preco_base: 100, tempo_estimado: '2h', imagem_url: '' },
+  { id: 's6_2', worker_id: 'w6', titulo: 'Limpeza Interna de Notebook', descricao: 'Troca de pasta térmica e limpeza dos coolers.', preco_base: 120, tempo_estimado: '2h', imagem_url: '' },
+  { id: 's6_3', worker_id: 'w6', titulo: 'Configuração de Roteador Wi-Fi', descricao: 'Configuração de redes, senhas e repetidores de sinal.', preco_base: 70, tempo_estimado: '1h', imagem_url: '' },
+
+  // w7 Jardineiro
+  { id: 's7', worker_id: 'w7', titulo: 'Roçagem de Terrenos', descricao: 'Limpeza de mato alto em lotes e terrenos (valor inicial).', preco_base: 150, tempo_estimado: '3h', imagem_url: '' },
+  { id: 's7_2', worker_id: 'w7', titulo: 'Manutenção de Gramado', descricao: 'Corte de grama com máquina, acabamento e adubação.', preco_base: 90, tempo_estimado: '2h', imagem_url: '' },
+  { id: 's7_3', worker_id: 'w7', titulo: 'Poda de Árvores Frutíferas', descricao: 'Poda direcionada para aumentar a produção de frutos.', preco_base: 80, tempo_estimado: '2h', imagem_url: '' },
 ];
 
 // ==========================================
@@ -108,13 +135,13 @@ export const useAppStore = create((set, get) => ({
   toast: null,
 
   // ---- SETTERS COM PERSISTÊNCIA FIREBASE ----
-  setUsers: (v) => { set({ users: v }); saveToFirebase('maos_v7_users', v); },
-  setWorkerDetails: (v) => { set({ workerDetails: v }); saveToFirebase('maos_v7_worker_details', v); },
-  setContratanteDetails: (v) => { set({ contratanteDetails: v }); saveToFirebase('maos_v7_contratante_details', v); },
-  setServices: (v) => { set({ services: v }); saveToFirebase('maos_v7_services', v); },
-  setOrders: (v) => { set({ orders: v }); saveToFirebase('maos_v7_orders', v); },
-  setReviews: (v) => { set({ reviews: v }); saveToFirebase('maos_v7_reviews', v); },
-  setSupportTickets: (v) => { set({ supportTickets: v }); saveToFirebase('maos_v7_support_tickets', v); },
+  setUsers: (v) => { set({ users: v }); saveToFirebase('maos_v8_users', v); },
+  setWorkerDetails: (v) => { set({ workerDetails: v }); saveToFirebase('maos_v8_worker_details', v); },
+  setContratanteDetails: (v) => { set({ contratanteDetails: v }); saveToFirebase('maos_v8_contratante_details', v); },
+  setServices: (v) => { set({ services: v }); saveToFirebase('maos_v8_services', v); },
+  setOrders: (v) => { set({ orders: v }); saveToFirebase('maos_v8_orders', v); },
+  setReviews: (v) => { set({ reviews: v }); saveToFirebase('maos_v8_reviews', v); },
+  setSupportTickets: (v) => { set({ supportTickets: v }); saveToFirebase('maos_v8_support_tickets', v); },
 
   setCurrentView: (view) => {
     set({ currentView: view, selectedWorkerId: null, selectedClientId: null });
@@ -198,12 +225,12 @@ export const useAppStore = create((set, get) => ({
       if (loadedCount === 7) set({ isLoaded: true });
     };
 
-    syncWithFirebase('maos_v7_users', INITIAL_USERS, (data) => { set({ users: data }); checkLoaded(); });
-    syncWithFirebase('maos_v7_worker_details', INITIAL_WORKER_DETAILS, (data) => { set({ workerDetails: data }); checkLoaded(); });
-    syncWithFirebase('maos_v7_contratante_details', INITIAL_CONTRATANTE_DETAILS, (data) => { set({ contratanteDetails: data }); checkLoaded(); });
-    syncWithFirebase('maos_v7_services', INITIAL_SERVICES, (data) => { set({ services: data }); checkLoaded(); });
-    syncWithFirebase('maos_v7_orders', [], (data) => { set({ orders: data }); checkLoaded(); });
-    syncWithFirebase('maos_v7_reviews', [], (data) => { set({ reviews: data }); checkLoaded(); });
-    syncWithFirebase('maos_v7_support_tickets', [], (data) => { set({ supportTickets: data }); checkLoaded(); });
+    syncWithFirebase('maos_v8_users', INITIAL_USERS, (data) => { set({ users: data }); checkLoaded(); });
+    syncWithFirebase('maos_v8_worker_details', INITIAL_WORKER_DETAILS, (data) => { set({ workerDetails: data }); checkLoaded(); });
+    syncWithFirebase('maos_v8_contratante_details', INITIAL_CONTRATANTE_DETAILS, (data) => { set({ contratanteDetails: data }); checkLoaded(); });
+    syncWithFirebase('maos_v8_services', INITIAL_SERVICES, (data) => { set({ services: data }); checkLoaded(); });
+    syncWithFirebase('maos_v8_orders', [], (data) => { set({ orders: data }); checkLoaded(); });
+    syncWithFirebase('maos_v8_reviews', [], (data) => { set({ reviews: data }); checkLoaded(); });
+    syncWithFirebase('maos_v8_support_tickets', [], (data) => { set({ supportTickets: data }); checkLoaded(); });
   }
 }));
