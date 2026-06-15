@@ -115,6 +115,55 @@ const INITIAL_SERVICES = [
 ];
 
 // ==========================================
+// HELPER FUNÇÕES E PERSISTÊNCIA
+// ==========================================
+export const isWorkerOnline = (details) => {
+  if (!details) return false;
+  const horaInicio = details.horaInicio || '08:00';
+  const horaFim = details.horaFim || '18:00';
+  let isWithinHours = true;
+  try {
+    const agora = new Date();
+    const horaAtual = agora.getHours() * 60 + agora.getMinutes();
+    const [hI, mI] = horaInicio.split(':').map(Number);
+    const inicioMinutos = hI * 60 + mI;
+    const [hF, mF] = horaFim.split(':').map(Number);
+    let fimMinutos = hF * 60 + mF;
+    if (fimMinutos < inicioMinutos) fimMinutos += 24 * 60;
+    let adjustedAtual = horaAtual;
+    if (horaAtual < inicioMinutos && fimMinutos > 24 * 60) adjustedAtual += 24 * 60;
+    if (adjustedAtual < inicioMinutos || adjustedAtual > fimMinutos) isWithinHours = false;
+  } catch(e) {}
+  return details.isOnline && isWithinHours;
+};
+
+export const sendPushNotification = (title, body) => {
+  if (!("Notification" in window)) return;
+  if (Notification.permission === "granted") {
+    new Notification(title, { body, icon: '/icon.svg' });
+  } else if (Notification.permission !== "denied") {
+    Notification.requestPermission().then(permission => {
+      if (permission === "granted") new Notification(title, { body, icon: '/icon.svg' });
+    });
+  }
+};
+
+let initialUser = null;
+try {
+  const storedUser = localStorage.getItem('maos_currentUser');
+  const lastActivity = localStorage.getItem('maos_lastActivity');
+  if (storedUser && lastActivity) {
+    if (Date.now() - parseInt(lastActivity) < 30 * 60 * 1000) {
+      initialUser = JSON.parse(storedUser);
+      localStorage.setItem('maos_lastActivity', Date.now().toString());
+    } else {
+      localStorage.removeItem('maos_currentUser');
+      localStorage.removeItem('maos_lastActivity');
+    }
+  }
+} catch (e) {}
+
+// ==========================================
 // STORE ZUSTAND
 // ==========================================
 export const useAppStore = create((set, get) => ({
@@ -128,7 +177,7 @@ export const useAppStore = create((set, get) => ({
   reviews: [],
   supportTickets: [],
   
-  currentUser: null,
+  currentUser: initialUser,
   currentView: 'HOME',
   selectedWorkerId: null,
   selectedClientId: null,
@@ -173,6 +222,9 @@ export const useAppStore = create((set, get) => ({
       showToast('Cadastro ainda em análise. Aguarde a aprovação.', 'warning'); return false;
     }
     set({ currentUser: user });
+    localStorage.setItem('maos_currentUser', JSON.stringify(user));
+    localStorage.setItem('maos_lastActivity', Date.now().toString());
+    if (Notification.permission === "default") Notification.requestPermission();
     if (user.role === 'ADMIN') get().setCurrentView('ADMIN_DASH');
     else if (user.role === 'CONTRATANTE') get().setCurrentView('HOME');
     else get().setCurrentView('WORKER_DASH');
@@ -182,6 +234,8 @@ export const useAppStore = create((set, get) => ({
 
   logout: () => {
     set({ currentUser: null });
+    localStorage.removeItem('maos_currentUser');
+    localStorage.removeItem('maos_lastActivity');
     get().setCurrentView('HOME');
     get().showToast('Você saiu da conta.');
   },
@@ -195,6 +249,9 @@ export const useAppStore = create((set, get) => ({
     if (newUser.role === 'CONTRATANTE') {
       setContratanteDetails([...contratanteDetails, { user_id: newUser.id, ...specificData, total_pedidos: 0 }]);
       set({ currentUser: newUser });
+      localStorage.setItem('maos_currentUser', JSON.stringify(newUser));
+      localStorage.setItem('maos_lastActivity', Date.now().toString());
+      if (Notification.permission === "default") Notification.requestPermission();
       get().setCurrentView('HOME');
       showToast('Conta criada com sucesso!');
     } else {
@@ -234,3 +291,48 @@ export const useAppStore = create((set, get) => ({
     syncWithFirebase('maos_v11_support_tickets', [], (data) => { set({ supportTickets: data }); checkLoaded(); });
   }
 }));
+
+// ==========================================
+// NOTIFICATIONS LOGIC
+// ==========================================
+let prevOrdersCount = -1;
+let prevOrdersChatCount = {};
+
+useAppStore.subscribe((state) => {
+  const currentUser = state.currentUser;
+  if (!currentUser || !state.isLoaded) return;
+
+  if (prevOrdersCount === -1) {
+    prevOrdersCount = state.orders.length;
+    state.orders.forEach(o => prevOrdersChatCount[o.id] = o.chat_history?.length || 0);
+    return;
+  }
+
+  // New Orders
+  if (state.orders.length > prevOrdersCount) {
+    const newOrders = state.orders.slice(prevOrdersCount);
+    newOrders.forEach(o => {
+      if (o.worker_id === currentUser.id && o.status === 'PENDENTE') {
+        sendPushNotification("Novo Serviço Solicitado!", `Alguém acabou de solicitar seus serviços.`);
+      }
+      prevOrdersChatCount[o.id] = o.chat_history?.length || 0;
+    });
+    prevOrdersCount = state.orders.length;
+  }
+
+  // New Messages in Orders
+  state.orders.forEach(o => {
+    const prevCount = prevOrdersChatCount[o.id] || 0;
+    const currCount = o.chat_history?.length || 0;
+    if (currCount > prevCount) {
+      const lastMsg = o.chat_history[currCount - 1];
+      if (lastMsg && lastMsg.sender !== currentUser.id) {
+        if (o.worker_id === currentUser.id || o.contratante_id === currentUser.id) {
+          const senderName = state.users.find(u => u.id === lastMsg.sender)?.nome || 'Usuário';
+          sendPushNotification("Nova Mensagem", `${senderName}: ${lastMsg.text}`);
+        }
+      }
+      prevOrdersChatCount[o.id] = currCount;
+    }
+  });
+});

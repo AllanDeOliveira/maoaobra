@@ -1,6 +1,6 @@
 // src/pages/HomeContratante.jsx
 import { useState } from 'react';
-import { useAppStore, getEstimatedDistance } from '../store';
+import { useAppStore, getEstimatedDistance, isWorkerOnline } from '../store';
 import StarRating from '../components/ui/StarRating';
 
 const CATEGORIES = ['Todos','Eletricista','Encanador','Diarista','Pintor','Montador','TI','Jardineiro'];
@@ -103,7 +103,7 @@ export default function HomeContratante({ onSelectWorker }) {
                   <div className="relative shrink-0">
                     <img src={w.foto_perfil_url} alt={w.nome} className="w-20 h-20 rounded-2xl object-cover bg-gray-200 shadow-sm" />
                     <div className="absolute -bottom-2 -right-2 bg-white rounded-full p-1 shadow-sm">
-                      <i className={`ph-fill ph-circle text-lg ${details?.isOnline ? 'text-green-500' : 'text-gray-300'}`} />
+                      <i className={`ph-fill ph-circle text-lg ${isWorkerOnline(details) ? 'text-green-500' : 'text-gray-300'}`} />
                     </div>
                   </div>
                   <div className="flex-1 min-w-0">

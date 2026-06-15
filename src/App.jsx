@@ -58,6 +58,35 @@ function AppRouter() {
     return () => window.removeEventListener('popstate', handler);
   }, []);
 
+  // Inactivity Timeout
+  useEffect(() => {
+    let timeout;
+    const resetTimer = () => {
+      if (currentUser) {
+        localStorage.setItem('maos_lastActivity', Date.now().toString());
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          useAppStore.getState().logout();
+          useAppStore.getState().showToast('Sessão expirada por inatividade (30 min)', 'warning');
+        }, 30 * 60 * 1000);
+      }
+    };
+
+    if (currentUser) {
+      resetTimer();
+      window.addEventListener('mousemove', resetTimer);
+      window.addEventListener('keypress', resetTimer);
+      window.addEventListener('touchstart', resetTimer);
+    }
+    
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener('mousemove', resetTimer);
+      window.removeEventListener('keypress', resetTimer);
+      window.removeEventListener('touchstart', resetTimer);
+    };
+  }, [currentUser]);
+
   if (!isLoaded) {
     return (
       <div className="min-h-screen bg-[#F9FAFB] flex flex-col items-center justify-center">
