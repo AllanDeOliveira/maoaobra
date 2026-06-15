@@ -85,7 +85,20 @@ export default function WorkerProfileEdit() {
                 </div>
                 <div className="bg-gray-50 p-4 rounded-2xl border border-gray-200">
                   <div className="font-extrabold text-[#1F2937] text-sm mb-2">Dias de Trabalho</div>
-                  <input type="text" defaultValue={details?.diasTrabalho || details?.workingHours?.split(',')[0] || 'Seg-Sex'} onBlur={e => { setWorkerDetails(workerDetails.map(w => w.user_id === currentUser.id ? { ...w, diasTrabalho: e.target.value } : w)); showToast('Dias de trabalho salvos!'); }} className="w-full px-3 py-2 text-sm rounded-xl border border-gray-300 outline-none focus:border-[#EA1D2C] focus:ring-1 focus:ring-[#EA1D2C]" placeholder="Ex: Seg-Sex, Todos os dias..." />
+                  <select
+                    defaultValue={details?.diasTrabalho || details?.workingHours?.split(',')[0] || 'Seg-Sex'}
+                    onChange={e => {
+                      setWorkerDetails(workerDetails.map(w => w.user_id === currentUser.id ? { ...w, diasTrabalho: e.target.value } : w));
+                      showToast('Dias de trabalho salvos!');
+                    }}
+                    className="w-full px-3 py-2 text-sm rounded-xl border border-gray-300 outline-none focus:border-[#EA1D2C] focus:ring-1 focus:ring-[#EA1D2C] bg-white cursor-pointer"
+                  >
+                    <option value="Seg-Sex">Segunda a Sexta</option>
+                    <option value="Seg-Sab">Segunda a Sábado</option>
+                    <option value="Todos os dias">Todos os dias</option>
+                    <option value="Finais de semana">Apenas Finais de Semana</option>
+                    <option value="A combinar">A combinar</option>
+                  </select>
                 </div>
               </div>
             </div>

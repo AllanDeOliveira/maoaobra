@@ -49,8 +49,9 @@ export default function NavBar() {
   const hasUnread = myOrders.some(o => o.chat_history?.length > 0 && ['PENDENTE','ACEITO','EM_ANDAMENTO'].includes(o.status));
 
   const Logo = () => (
-    <span className="font-extrabold text-2xl select-none cursor-pointer" onClick={() => setCurrentView(role === 'ADMIN' ? 'ADMIN_DASH' : 'HOME')}>
-      <span className="text-[#1F2937]">mão</span><span className="text-[#EA1D2C]">A</span><span className="text-[#1F2937]">obra</span>
+    <span className="font-extrabold text-2xl select-none cursor-pointer flex items-baseline gap-1" onClick={() => setCurrentView(role === 'ADMIN' ? 'ADMIN_DASH' : 'HOME')}>
+      <span><span className="text-[#1F2937]">mão</span><span className="text-[#EA1D2C]">A</span><span className="text-[#1F2937]">obra</span></span>
+      <span className="text-[10px] text-gray-300 font-medium">v0.1.1</span>
     </span>
   );
 
