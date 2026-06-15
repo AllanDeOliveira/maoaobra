@@ -67,7 +67,7 @@ const INITIAL_WORKER_DETAILS = [
   { user_id: 'w1', bio: 'Olá! Sou o Eduardo, eletricista com mais de 10 anos de experiência em instalações residenciais e prediais. Faço desde pequenas trocas de tomadas até quadros de distribuição complexos. Trabalho com segurança e sigo as normas técnicas (NBR 5410).', categorias: ['Eletricista'], nota_media: 4.9, portfolio_fotos: [], cpf: '123.456.789-00', cep: '78200-000', rua: 'Rua Principal', numero: '100', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sex, 08:00 às 18:00' },
   { user_id: 'w2', bio: 'Encanador profissional. Resolvo vazamentos, faço instalação de tubulações de água fria e quente, limpeza de caixa d\'água e desentupimento. Meu diferencial é a limpeza e agilidade no serviço.', categorias: ['Encanador'], nota_media: 4.8, portfolio_fotos: [], cpf: '223.456.789-00', cep: '78200-000', rua: 'Rua das Águas', numero: '200', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sex, 08:00 às 18:00' },
   { user_id: 'w3', bio: 'Diarista caprichosa, detalhista e de confiança. Faço faxinas pesadas, limpeza pós-obra, e organização de armários. Deixo sua casa brilhando com produtos adequados para cada superfície.', categorias: ['Diarista'], nota_media: 5.0, portfolio_fotos: [], cpf: '323.456.789-00', cep: '78200-000', rua: 'Rua da Limpeza', numero: '300', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sab, 07:00 às 17:00' },
-  { user_id: 'w4', bio: 'Pintor com especialidade em texturas, grafiato, pintura lisa e epóxi. Transformo o visual da sua casa protegendo seus móveis e chão. Garantia de acabamento liso e sem manchas.', categorias: ['Pintor'], nota_media: 4.7, portfolio_fotos: [], cpf: '423.456.789-00', cep: '78200-000', rua: 'Avenida das Cores', numero: '400', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: false, workingHours: 'Seg-Sex, 08:00 às 18:00' },
+  { user_id: 'w4', bio: 'Pintor com especialidade em texturas, grafiato, pintura lisa e epóxi. Transformo o visual da sua casa protegendo seus móveis e chão. Garantia de acabamento liso e sem manchas.', categorias: ['Pintor'], nota_media: 4.7, portfolio_fotos: [], cpf: '423.456.789-00', cep: '78200-000', rua: 'Avenida das Cores', numero: '400', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sex, 08:00 às 18:00' },
   { user_id: 'w5', bio: 'Montador de móveis experiente. Trago minhas próprias ferramentas e cuido das suas peças para não arranhar. Monto desde guarda-roupas enormes até painéis de TV com suporte embutido.', categorias: ['Montador'], nota_media: 4.6, portfolio_fotos: [], cpf: '523.456.789-00', cep: '78200-000', rua: 'Rua da Madeira', numero: '500', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sex, 08:00 às 18:00' },
   { user_id: 'w6', bio: 'Técnico de Informática (TI) com paixão por hardware e software. Removo vírus, formato computadores, configuro redes Wi-Fi empresariais e faço upgrade de SSD e Memória RAM na sua casa.', categorias: ['TI'], nota_media: 4.9, portfolio_fotos: [], cpf: '623.456.789-00', cep: '78200-000', rua: 'Rua dos Bits', numero: '600', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sex, 09:00 às 19:00' },
   { user_id: 'w7', bio: 'Jardineiro e paisagista. Adoro o que faço! Faço manutenção de gramados, poda de árvores de pequeno e médio porte, controle de pragas, adubação e criação de canteiros ornamentais.', categorias: ['Jardineiro'], nota_media: 4.8, portfolio_fotos: [], cpf: '723.456.789-00', cep: '78200-000', rua: 'Rua das Plantas', numero: '700', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sab, 06:00 às 16:00' },
@@ -184,13 +184,13 @@ export const useAppStore = create((set, get) => ({
   toast: null,
 
   // ---- SETTERS COM PERSISTÊNCIA FIREBASE ----
-  setUsers: (v) => { set({ users: v }); saveToFirebase('maos_v11_users', v); },
-  setWorkerDetails: (v) => { set({ workerDetails: v }); saveToFirebase('maos_v11_worker_details', v); },
-  setContratanteDetails: (v) => { set({ contratanteDetails: v }); saveToFirebase('maos_v11_contratante_details', v); },
-  setServices: (v) => { set({ services: v }); saveToFirebase('maos_v11_services', v); },
-  setOrders: (v) => { set({ orders: v }); saveToFirebase('maos_v11_orders', v); },
-  setReviews: (v) => { set({ reviews: v }); saveToFirebase('maos_v11_reviews', v); },
-  setSupportTickets: (v) => { set({ supportTickets: v }); saveToFirebase('maos_v11_support_tickets', v); },
+  setUsers: (v) => { set({ users: v }); saveToFirebase('maos_v12_users', v); },
+  setWorkerDetails: (v) => { set({ workerDetails: v }); saveToFirebase('maos_v12_worker_details', v); },
+  setContratanteDetails: (v) => { set({ contratanteDetails: v }); saveToFirebase('maos_v12_contratante_details', v); },
+  setServices: (v) => { set({ services: v }); saveToFirebase('maos_v12_services', v); },
+  setOrders: (v) => { set({ orders: v }); saveToFirebase('maos_v12_orders', v); },
+  setReviews: (v) => { set({ reviews: v }); saveToFirebase('maos_v12_reviews', v); },
+  setSupportTickets: (v) => { set({ supportTickets: v }); saveToFirebase('maos_v12_support_tickets', v); },
 
   setCurrentView: (view) => {
     set({ currentView: view, selectedWorkerId: null, selectedClientId: null });
@@ -282,13 +282,13 @@ export const useAppStore = create((set, get) => ({
       if (loadedCount === 7) set({ isLoaded: true });
     };
 
-    syncWithFirebase('maos_v11_users', INITIAL_USERS, (data) => { set({ users: data }); checkLoaded(); });
-    syncWithFirebase('maos_v11_worker_details', INITIAL_WORKER_DETAILS, (data) => { set({ workerDetails: data }); checkLoaded(); });
-    syncWithFirebase('maos_v11_contratante_details', INITIAL_CONTRATANTE_DETAILS, (data) => { set({ contratanteDetails: data }); checkLoaded(); });
-    syncWithFirebase('maos_v11_services', INITIAL_SERVICES, (data) => { set({ services: data }); checkLoaded(); });
-    syncWithFirebase('maos_v11_orders', [], (data) => { set({ orders: data }); checkLoaded(); });
-    syncWithFirebase('maos_v11_reviews', [], (data) => { set({ reviews: data }); checkLoaded(); });
-    syncWithFirebase('maos_v11_support_tickets', [], (data) => { set({ supportTickets: data }); checkLoaded(); });
+    syncWithFirebase('maos_v12_users', INITIAL_USERS, (data) => { set({ users: data }); checkLoaded(); });
+    syncWithFirebase('maos_v12_worker_details', INITIAL_WORKER_DETAILS, (data) => { set({ workerDetails: data }); checkLoaded(); });
+    syncWithFirebase('maos_v12_contratante_details', INITIAL_CONTRATANTE_DETAILS, (data) => { set({ contratanteDetails: data }); checkLoaded(); });
+    syncWithFirebase('maos_v12_services', INITIAL_SERVICES, (data) => { set({ services: data }); checkLoaded(); });
+    syncWithFirebase('maos_v12_orders', [], (data) => { set({ orders: data }); checkLoaded(); });
+    syncWithFirebase('maos_v12_reviews', [], (data) => { set({ reviews: data }); checkLoaded(); });
+    syncWithFirebase('maos_v12_support_tickets', [], (data) => { set({ supportTickets: data }); checkLoaded(); });
   }
 }));
 
