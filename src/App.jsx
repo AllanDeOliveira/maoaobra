@@ -143,6 +143,7 @@ function AppRouter() {
             <span className="text-[#1F2937]">obra</span>
           </div>
           <p className="text-xs text-gray-400 font-bold uppercase tracking-wide">© 2026 Todos os direitos reservados.</p>
+          <p className="text-[10px] text-gray-300 font-medium mt-1">v0.1.2</p>
         </div>
       </footer>
     </div>
