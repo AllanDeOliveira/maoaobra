@@ -220,6 +220,35 @@ export const useAppStore = create((set, get) => ({
     setWorkerDetails(workerDetails.filter(w => w.user_id !== id));
     showToast('Cadastro recusado e removido.');
   },
+
+  deleteUser: (id) => {
+    const { users, workerDetails, contratanteDetails, services, orders, reviews, supportTickets, setUsers, setWorkerDetails, setContratanteDetails, setServices, setOrders, setReviews, setSupportTickets, showToast } = get();
+    
+    const user = users.find(u => u.id === id);
+    if (!user) return;
+
+    if (user.role === 'ADMIN') {
+      showToast('Não é possível excluir o administrador supremo!', 'error');
+      return;
+    }
+
+    if (window.confirm(`Tem certeza que deseja BANIR e apagar todos os dados de ${user.nome}? Esta ação removerá o usuário do banco de dados.`)) {
+      setUsers(users.filter(u => u.id !== id));
+      
+      if (user.role === 'TRABALHADOR') {
+        setWorkerDetails(workerDetails.filter(w => w.user_id !== id));
+        setServices(services.filter(s => s.worker_id !== id));
+      } else {
+        setContratanteDetails(contratanteDetails.filter(c => c.user_id !== id));
+      }
+      
+      setOrders(orders.filter(o => o.worker_id !== id && o.contratante_id !== id));
+      setReviews(reviews.filter(r => r.worker_id !== id && r.contratante_id !== id));
+      setSupportTickets(supportTickets.filter(t => t.user_id !== id));
+
+      showToast('Usuário e todos seus dados foram banidos do sistema.', 'warning');
+    }
+  },
   
   // Função para inicializar a escuta ao Firebase
   initFirebase: () => {

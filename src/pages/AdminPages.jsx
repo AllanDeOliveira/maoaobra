@@ -115,8 +115,13 @@ function AdminListLayout({ title, usersList }) {
                       <div className="text-xs text-gray-500">{u.telefone}</div>
                     </td>
                     <td className="p-4 hidden sm:table-cell text-sm font-medium text-gray-600">{new Date(u.data_criacao).toLocaleDateString('pt-BR')}</td>
-                    <td className="p-4 text-right">
-                      <button onClick={() => setSelectedUser(u)} className="bg-gray-100 hover:bg-[#EA1D2C] hover:text-white text-gray-700 font-bold py-2 px-4 rounded-lg text-sm transition shadow-sm">Ver Dossiê</button>
+                    <td className="p-4 text-right flex items-center justify-end gap-2">
+                      <button onClick={() => setSelectedUser(u)} className="bg-gray-100 hover:bg-[#EA1D2C] hover:text-white text-gray-700 font-bold py-2 px-3 md:px-4 rounded-lg text-xs md:text-sm transition shadow-sm">Ver Dossiê</button>
+                      {u.role !== 'ADMIN' && (
+                        <button onClick={() => useAppStore.getState().deleteUser(u.id)} className="bg-red-50 hover:bg-red-100 text-red-500 hover:text-red-700 font-bold p-2 md:py-2 md:px-3 rounded-lg text-xs md:text-sm transition border border-red-100">
+                          <i className="ph-bold ph-trash" />
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}
