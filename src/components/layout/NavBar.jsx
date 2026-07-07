@@ -3,11 +3,13 @@ import { useAppStore } from '../../store';
 
 const CONTRATANTE_LINKS = [
   { id: 'HOME',    icon: 'ph-house',         label: 'Início' },
+  { id: 'CHATS',   icon: 'ph-chat-circle-dots', label: 'Mensagens' },
   { id: 'ORDERS',  icon: 'ph-receipt',       label: 'Pedidos' },
   { id: 'PROFILE', icon: 'ph-user-circle',   label: 'Perfil' },
 ];
 const WORKER_LINKS = [
   { id: 'WORKER_DASH',     icon: 'ph-chart-line', label: 'Dashboard' },
+  { id: 'CHATS',           icon: 'ph-chat-circle-dots', label: 'Mensagens' },
   { id: 'WORKER_SERVICES', icon: 'ph-briefcase',  label: 'Serviços' },
   { id: 'WORKER_HISTORY',  icon: 'ph-clock',      label: 'Histórico' },
   { id: 'WORKER_PROFILE',  icon: 'ph-user-circle',label: 'Perfil' },
@@ -86,7 +88,7 @@ export default function NavBar() {
         <nav className="flex items-center gap-1">
           {links.map(link => {
             const active = currentView === link.id;
-            const badge = (link.id === 'ORDERS' || link.id === 'WORKER_DASH') && hasUnread;
+            const badge = link.id === 'CHATS' && hasUnread;
             return (
               <button
                 key={link.id}
@@ -113,7 +115,7 @@ export default function NavBar() {
       <nav className="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-200 flex justify-around pt-2 pb-4 z-50 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
         {links.map(link => {
           const active = currentView === link.id;
-          const badge = (link.id === 'ORDERS' || link.id === 'WORKER_DASH') && hasUnread;
+          const badge = link.id === 'CHATS' && hasUnread;
           return (
             <button
               key={link.id}

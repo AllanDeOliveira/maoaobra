@@ -21,6 +21,7 @@ import WorkerProfileEdit from './pages/WorkerProfileEdit';
 
 import AdminDashboard from './pages/AdminDashboard';
 import { AdminClients, AdminWorkers, AdminApprovals, AdminSupport, AdminChats } from './pages/AdminPages';
+import ActiveChats from './pages/ActiveChats';
 
 function AppRouter() {
   const {
@@ -106,6 +107,7 @@ function AppRouter() {
   else if (selectedWorkerId)                content = <WorkerProfileDetail workerId={selectedWorkerId} onBack={() => setSelectedWorkerId(null)} />;
   else if (selectedClientId)                content = <ClientProfileDetail clientId={selectedClientId} onBack={() => setSelectedClientId(null)} />;
   else if (currentView === 'HOME')          content = <HomeContratante onSelectWorker={setSelectedWorkerId} />;
+  else if (currentView === 'CHATS')         content = <ActiveChats />;
   else if (currentView === 'ORDERS')        content = <ClientOrders />;
   else if (currentView === 'PROFILE')       content = <ProfileUser />;
   else if (currentView === 'WORKER_DASH')   content = <WorkerDashboard />;

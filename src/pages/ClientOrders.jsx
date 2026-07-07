@@ -17,7 +17,7 @@ export default function ClientOrders() {
     </div>
   );
 
-  const myOrders = orders.filter(o => o.contratante_id === currentUser.id);
+  const myOrders = orders.filter(o => o.contratante_id === currentUser.id && ['CONCLUIDO', 'RECUSADO'].includes(o.status));
 
   const statusStyle = (status) => {
     if (['PENDENTE','ACEITO','EM_ANDAMENTO'].includes(status)) return { badge: 'bg-orange-50 text-orange-700 border-orange-200', bar: 'bg-orange-500' };
@@ -27,7 +27,7 @@ export default function ClientOrders() {
 
   return (
     <div className="pb-28 animate-fade-in w-full">
-      <Header title="Meus Pedidos" />
+      <Header title="Histórico de Pedidos" />
       <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
         {myOrders.length === 0 ? (
           <div className="text-center col-span-full bg-white p-10 rounded-3xl border border-gray-100 shadow-sm max-w-lg mx-auto">
