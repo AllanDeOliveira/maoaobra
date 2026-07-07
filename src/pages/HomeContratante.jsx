@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { useAppStore, getEstimatedDistance, isWorkerOnline } from '../store';
 import StarRating from '../components/ui/StarRating';
 
-const CATEGORIES = ['Todos','Eletricista','Encanador','Diarista','Pintor','Montador','TI','Jardineiro'];
-const CAT_ICONS  = { Todos:'ph-squares-four', Eletricista:'ph-lightning', Encanador:'ph-drop', Diarista:'ph-broom', Pintor:'ph-paint-roller', Montador:'ph-wrench', TI:'ph-desktop', Jardineiro:'ph-plant' };
+const CATEGORIES = ['Todos','Eletricista','Encanador','Diarista','Pintor','Montador','TI','Freteiro'];
+const CAT_ICONS  = { Todos:'ph-squares-four', Eletricista:'ph-lightning', Encanador:'ph-drop', Diarista:'ph-broom', Pintor:'ph-paint-roller', Montador:'ph-wrench', TI:'ph-desktop', Freteiro:'ph-truck' };
 
 export default function HomeContratante({ onSelectWorker }) {
   const { users, workerDetails, reviews, currentUser, setCurrentView } = useAppStore();
