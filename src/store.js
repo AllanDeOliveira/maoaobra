@@ -60,7 +60,7 @@ const INITIAL_USERS = [
   { id: 'w5', nome: 'Tiago Montador', email: 'montador@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=400&fit=crop', telefone: '(11) 94444-3333', data_criacao: new Date().toISOString(), status: 'APPROVED' },
   { id: 'w6', nome: 'Carlos TI', email: 'ti@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=400&h=400&fit=crop', telefone: '(11) 93333-2222', data_criacao: new Date().toISOString(), status: 'APPROVED' },
   { id: 'w7', nome: 'Roberto Fretes', email: 'frete@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1581574919402-5b7d733224d6?w=400&h=400&fit=crop', telefone: '(11) 92222-1111', data_criacao: new Date().toISOString(), status: 'APPROVED' },
-  { id: 'w8', nome: 'Felipe Eletricista', email: 'felipe@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1541888086925-ebbc37cc97c4?w=400&h=400&fit=crop', telefone: '(11) 91111-0000', data_criacao: new Date().toISOString(), status: 'APPROVED' },
+  { id: 'w8', nome: 'Felipe Eletricista', email: 'felipe@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop', telefone: '(11) 91111-0000', data_criacao: new Date().toISOString(), status: 'APPROVED' },
   { id: 'w9', nome: 'Ana Diarista', email: 'ana@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=400&h=400&fit=crop', telefone: '(11) 90000-9999', data_criacao: new Date().toISOString(), status: 'APPROVED' },
 ];
 
@@ -169,13 +169,13 @@ export const useAppStore = create((set, get) => ({
   toast: null,
 
   // ---- SETTERS COM PERSISTÊNCIA FIREBASE ----
-  setUsers: (v) => { set({ users: v }); saveToFirebase('maos_v17_users', v); },
-  setWorkerDetails: (v) => { set({ workerDetails: v }); saveToFirebase('maos_v17_worker_details', v); },
-  setContratanteDetails: (v) => { set({ contratanteDetails: v }); saveToFirebase('maos_v17_contratante_details', v); },
-  setServices: (v) => { set({ services: v }); saveToFirebase('maos_v17_services', v); },
-  setOrders: (v) => { set({ orders: v }); saveToFirebase('maos_v17_orders', v); },
-  setReviews: (v) => { set({ reviews: v }); saveToFirebase('maos_v17_reviews', v); },
-  setSupportTickets: (v) => { set({ supportTickets: v }); saveToFirebase('maos_v17_support_tickets', v); },
+  setUsers: (v) => { set({ users: v }); saveToFirebase('maos_v18_users', v); },
+  setWorkerDetails: (v) => { set({ workerDetails: v }); saveToFirebase('maos_v18_worker_details', v); },
+  setContratanteDetails: (v) => { set({ contratanteDetails: v }); saveToFirebase('maos_v18_contratante_details', v); },
+  setServices: (v) => { set({ services: v }); saveToFirebase('maos_v18_services', v); },
+  setOrders: (v) => { set({ orders: v }); saveToFirebase('maos_v18_orders', v); },
+  setReviews: (v) => { set({ reviews: v }); saveToFirebase('maos_v18_reviews', v); },
+  setSupportTickets: (v) => { set({ supportTickets: v }); saveToFirebase('maos_v18_support_tickets', v); },
 
   setCurrentView: (view) => {
     set({ currentView: view, selectedWorkerId: null, selectedClientId: null });
@@ -296,13 +296,13 @@ export const useAppStore = create((set, get) => ({
       if (loadedCount === 7) set({ isLoaded: true });
     };
 
-    syncWithFirebase('maos_v17_users', INITIAL_USERS, (data) => { set({ users: data }); checkLoaded(); });
-    syncWithFirebase('maos_v17_worker_details', INITIAL_WORKER_DETAILS, (data) => { set({ workerDetails: data }); checkLoaded(); });
-    syncWithFirebase('maos_v17_contratante_details', INITIAL_CONTRATANTE_DETAILS, (data) => { set({ contratanteDetails: data }); checkLoaded(); });
-    syncWithFirebase('maos_v17_services', INITIAL_SERVICES, (data) => { set({ services: data }); checkLoaded(); });
-    syncWithFirebase('maos_v17_orders', [], (data) => { set({ orders: data }); checkLoaded(); });
-    syncWithFirebase('maos_v17_reviews', [], (data) => { set({ reviews: data }); checkLoaded(); });
-    syncWithFirebase('maos_v17_support_tickets', [], (data) => { set({ supportTickets: data }); checkLoaded(); });
+    syncWithFirebase('maos_v18_users', INITIAL_USERS, (data) => { set({ users: data }); checkLoaded(); });
+    syncWithFirebase('maos_v18_worker_details', INITIAL_WORKER_DETAILS, (data) => { set({ workerDetails: data }); checkLoaded(); });
+    syncWithFirebase('maos_v18_contratante_details', INITIAL_CONTRATANTE_DETAILS, (data) => { set({ contratanteDetails: data }); checkLoaded(); });
+    syncWithFirebase('maos_v18_services', INITIAL_SERVICES, (data) => { set({ services: data }); checkLoaded(); });
+    syncWithFirebase('maos_v18_orders', [], (data) => { set({ orders: data }); checkLoaded(); });
+    syncWithFirebase('maos_v18_reviews', [], (data) => { set({ reviews: data }); checkLoaded(); });
+    syncWithFirebase('maos_v18_support_tickets', [], (data) => { set({ supportTickets: data }); checkLoaded(); });
   }
 }));
 
