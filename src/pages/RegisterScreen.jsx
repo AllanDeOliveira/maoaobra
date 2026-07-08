@@ -158,7 +158,7 @@ export default function RegisterScreen() {
                 <div>
                   <Label>Especialidade Principal</Label>
                   <select value={categoria} onChange={e => setCategoria(e.target.value)} className={inp + ' appearance-none'}>
-                    {['Eletricista','Encanador','Diarista','Pintor','Montador','TI','Freteiro'].map(c => <option key={c}>{c}</option>)}
+                    {['Eletricista','Encanador','Diarista','Pintor','Montador','TI','Freteiro','Pedreiro','Mecânico'].map(c => <option key={c}>{c}</option>)}
                   </select>
                 </div>
                 <div>

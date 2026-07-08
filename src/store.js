@@ -60,6 +60,8 @@ const INITIAL_USERS = [
   { id: 'w5', nome: 'Tiago Montador', email: 'montador@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=400&fit=crop', telefone: '(11) 94444-3333', data_criacao: new Date().toISOString(), status: 'APPROVED' },
   { id: 'w6', nome: 'Carlos TI', email: 'ti@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=400&h=400&fit=crop', telefone: '(11) 93333-2222', data_criacao: new Date().toISOString(), status: 'APPROVED' },
   { id: 'w7', nome: 'Roberto Fretes', email: 'frete@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1581574919402-5b7d733224d6?w=400&h=400&fit=crop', telefone: '(11) 92222-1111', data_criacao: new Date().toISOString(), status: 'APPROVED' },
+  { id: 'w8', nome: 'João Pedreiro', email: 'pedreiro@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1541888086925-ebbc37cc97c4?w=400&h=400&fit=crop', telefone: '(11) 91111-0000', data_criacao: new Date().toISOString(), status: 'APPROVED' },
+  { id: 'w9', nome: 'Lucas Mecânico', email: 'mecanico@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=400&h=400&fit=crop', telefone: '(11) 90000-9999', data_criacao: new Date().toISOString(), status: 'APPROVED' },
 ];
 
 const INITIAL_WORKER_DETAILS = [
@@ -70,6 +72,8 @@ const INITIAL_WORKER_DETAILS = [
   { user_id: 'w5', bio: 'Montagem de móveis novos e usados com perfeição.', categorias: ['Montador'], nota_media: 4.8, portfolio_fotos: [], cpf: '523.456.789-00', cep: '78200-000', rua: 'Rua dos Móveis', numero: '500', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sab, 08:00 às 18:00' },
   { user_id: 'w6', bio: 'Assistência técnica em computadores e redes.', categorias: ['TI'], nota_media: 4.9, portfolio_fotos: [], cpf: '623.456.789-00', cep: '78200-000', rua: 'Rua dos Bits', numero: '600', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sex, 09:00 às 19:00' },
   { user_id: 'w7', bio: 'Mudanças e fretes para toda a região.', categorias: ['Freteiro'], nota_media: 4.6, portfolio_fotos: [], cpf: '723.456.789-00', cep: '78200-000', rua: 'Avenida do Transporte', numero: '700', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Dom-Dom, 06:00 às 20:00' },
+  { user_id: 'w8', bio: 'Construção civil, reformas e acabamentos.', categorias: ['Pedreiro'], nota_media: 4.8, portfolio_fotos: [], cpf: '823.456.789-00', cep: '78200-000', rua: 'Rua da Obra', numero: '800', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sab, 07:00 às 17:00' },
+  { user_id: 'w9', bio: 'Manutenção preventiva e corretiva de veículos.', categorias: ['Mecânico'], nota_media: 4.9, portfolio_fotos: [], cpf: '923.456.789-00', cep: '78200-000', rua: 'Avenida dos Motores', numero: '900', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sex, 08:00 às 18:00' },
 ];
 
 const INITIAL_CONTRATANTE_DETAILS = [];
@@ -89,6 +93,10 @@ const INITIAL_SERVICES = [
   { id: 's12', worker_id: 'w6', titulo: 'Configuração de Roteador Wi-Fi', preco_base: 80, descricao: 'Instalação e configuração de repetidores e redes.', imagem_url: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=500&h=300&fit=crop' },
   { id: 's13', worker_id: 'w7', titulo: 'Frete Municipal (Pequeno)', preco_base: 150, descricao: 'Transporte de móveis e eletrodomésticos dentro de Cáceres.', imagem_url: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=500&h=300&fit=crop' },
   { id: 's14', worker_id: 'w7', titulo: 'Mudança Completa Residencial', preco_base: 450, descricao: 'Caminhão baú grande para mudança completa.', imagem_url: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=500&h=300&fit=crop' },
+  { id: 's15', worker_id: 'w8', titulo: 'Construção de Muro', preco_base: 800, descricao: 'Levantamento de muro de alvenaria com blocos.', imagem_url: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=500&h=300&fit=crop' },
+  { id: 's16', worker_id: 'w8', titulo: 'Reboco e Acabamento', preco_base: 500, descricao: 'Reboco de paredes internas e externas com excelente nivelamento.', imagem_url: 'https://images.unsplash.com/photo-1622322695503-490325492d37?w=500&h=300&fit=crop' },
+  { id: 's17', worker_id: 'w9', titulo: 'Revisão Geral de Veículos', preco_base: 200, descricao: 'Checagem de freios, suspensão e motor.', imagem_url: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=500&h=300&fit=crop' },
+  { id: 's18', worker_id: 'w9', titulo: 'Troca de Óleo e Filtros', preco_base: 120, descricao: 'Serviço rápido de troca de óleo e filtros do motor.', imagem_url: 'https://images.unsplash.com/photo-1605342416281-799f928cddbd?w=500&h=300&fit=crop' },
 ];
 
 // ==========================================
@@ -161,13 +169,13 @@ export const useAppStore = create((set, get) => ({
   toast: null,
 
   // ---- SETTERS COM PERSISTÊNCIA FIREBASE ----
-  setUsers: (v) => { set({ users: v }); saveToFirebase('maos_v15_users', v); },
-  setWorkerDetails: (v) => { set({ workerDetails: v }); saveToFirebase('maos_v15_worker_details', v); },
-  setContratanteDetails: (v) => { set({ contratanteDetails: v }); saveToFirebase('maos_v15_contratante_details', v); },
-  setServices: (v) => { set({ services: v }); saveToFirebase('maos_v15_services', v); },
-  setOrders: (v) => { set({ orders: v }); saveToFirebase('maos_v15_orders', v); },
-  setReviews: (v) => { set({ reviews: v }); saveToFirebase('maos_v15_reviews', v); },
-  setSupportTickets: (v) => { set({ supportTickets: v }); saveToFirebase('maos_v15_support_tickets', v); },
+  setUsers: (v) => { set({ users: v }); saveToFirebase('maos_v16_users', v); },
+  setWorkerDetails: (v) => { set({ workerDetails: v }); saveToFirebase('maos_v16_worker_details', v); },
+  setContratanteDetails: (v) => { set({ contratanteDetails: v }); saveToFirebase('maos_v16_contratante_details', v); },
+  setServices: (v) => { set({ services: v }); saveToFirebase('maos_v16_services', v); },
+  setOrders: (v) => { set({ orders: v }); saveToFirebase('maos_v16_orders', v); },
+  setReviews: (v) => { set({ reviews: v }); saveToFirebase('maos_v16_reviews', v); },
+  setSupportTickets: (v) => { set({ supportTickets: v }); saveToFirebase('maos_v16_support_tickets', v); },
 
   setCurrentView: (view) => {
     set({ currentView: view, selectedWorkerId: null, selectedClientId: null });
@@ -288,13 +296,13 @@ export const useAppStore = create((set, get) => ({
       if (loadedCount === 7) set({ isLoaded: true });
     };
 
-    syncWithFirebase('maos_v15_users', INITIAL_USERS, (data) => { set({ users: data }); checkLoaded(); });
-    syncWithFirebase('maos_v15_worker_details', INITIAL_WORKER_DETAILS, (data) => { set({ workerDetails: data }); checkLoaded(); });
-    syncWithFirebase('maos_v15_contratante_details', INITIAL_CONTRATANTE_DETAILS, (data) => { set({ contratanteDetails: data }); checkLoaded(); });
-    syncWithFirebase('maos_v15_services', INITIAL_SERVICES, (data) => { set({ services: data }); checkLoaded(); });
-    syncWithFirebase('maos_v15_orders', [], (data) => { set({ orders: data }); checkLoaded(); });
-    syncWithFirebase('maos_v15_reviews', [], (data) => { set({ reviews: data }); checkLoaded(); });
-    syncWithFirebase('maos_v15_support_tickets', [], (data) => { set({ supportTickets: data }); checkLoaded(); });
+    syncWithFirebase('maos_v16_users', INITIAL_USERS, (data) => { set({ users: data }); checkLoaded(); });
+    syncWithFirebase('maos_v16_worker_details', INITIAL_WORKER_DETAILS, (data) => { set({ workerDetails: data }); checkLoaded(); });
+    syncWithFirebase('maos_v16_contratante_details', INITIAL_CONTRATANTE_DETAILS, (data) => { set({ contratanteDetails: data }); checkLoaded(); });
+    syncWithFirebase('maos_v16_services', INITIAL_SERVICES, (data) => { set({ services: data }); checkLoaded(); });
+    syncWithFirebase('maos_v16_orders', [], (data) => { set({ orders: data }); checkLoaded(); });
+    syncWithFirebase('maos_v16_reviews', [], (data) => { set({ reviews: data }); checkLoaded(); });
+    syncWithFirebase('maos_v16_support_tickets', [], (data) => { set({ supportTickets: data }); checkLoaded(); });
   }
 }));
 
