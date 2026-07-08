@@ -57,6 +57,9 @@ const INITIAL_USERS = [
   { id: 'w2', nome: 'Mario Encanador', email: 'encanador@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1540569014015-19a7be504e3a?w=400&h=400&fit=crop', telefone: '(11) 97777-6666', data_criacao: new Date().toISOString(), status: 'APPROVED' },
   { id: 'w3', nome: 'Maria Diarista', email: 'diarista@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&h=400&fit=crop', telefone: '(11) 96666-5555', data_criacao: new Date().toISOString(), status: 'APPROVED' },
   { id: 'w4', nome: 'Pablo Pintor', email: 'pintor@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=400&h=400&fit=crop', telefone: '(11) 95555-4444', data_criacao: new Date().toISOString(), status: 'APPROVED' },
+  { id: 'w5', nome: 'Tiago Montador', email: 'montador@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=400&fit=crop', telefone: '(11) 94444-3333', data_criacao: new Date().toISOString(), status: 'APPROVED' },
+  { id: 'w6', nome: 'Carlos TI', email: 'ti@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=400&h=400&fit=crop', telefone: '(11) 93333-2222', data_criacao: new Date().toISOString(), status: 'APPROVED' },
+  { id: 'w7', nome: 'Roberto Fretes', email: 'frete@gmail.com', senha: '123', role: 'TRABALHADOR', foto_perfil_url: 'https://images.unsplash.com/photo-1581574919402-5b7d733224d6?w=400&h=400&fit=crop', telefone: '(11) 92222-1111', data_criacao: new Date().toISOString(), status: 'APPROVED' },
 ];
 
 const INITIAL_WORKER_DETAILS = [
@@ -64,11 +67,29 @@ const INITIAL_WORKER_DETAILS = [
   { user_id: 'w2', bio: 'Resolvo vazamentos rapidamente.', categorias: ['Encanador'], nota_media: 4.8, portfolio_fotos: [], cpf: '223.456.789-00', cep: '78200-000', rua: 'Rua das Águas', numero: '200', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sex, 08:00 às 18:00' },
   { user_id: 'w3', bio: 'Faxina completa e caprichosa.', categorias: ['Diarista'], nota_media: 5.0, portfolio_fotos: [], cpf: '323.456.789-00', cep: '78200-000', rua: 'Rua da Limpeza', numero: '300', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sab, 07:00 às 17:00' },
   { user_id: 'w4', bio: 'Pintura lisa e texturas.', categorias: ['Pintor'], nota_media: 4.7, portfolio_fotos: [], cpf: '423.456.789-00', cep: '78200-000', rua: 'Avenida das Cores', numero: '400', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sex, 08:00 às 18:00' },
+  { user_id: 'w5', bio: 'Montagem de móveis novos e usados com perfeição.', categorias: ['Montador'], nota_media: 4.8, portfolio_fotos: [], cpf: '523.456.789-00', cep: '78200-000', rua: 'Rua dos Móveis', numero: '500', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sab, 08:00 às 18:00' },
+  { user_id: 'w6', bio: 'Assistência técnica em computadores e redes.', categorias: ['TI'], nota_media: 4.9, portfolio_fotos: [], cpf: '623.456.789-00', cep: '78200-000', rua: 'Rua dos Bits', numero: '600', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Seg-Sex, 09:00 às 19:00' },
+  { user_id: 'w7', bio: 'Mudanças e fretes para toda a região.', categorias: ['Freteiro'], nota_media: 4.6, portfolio_fotos: [], cpf: '723.456.789-00', cep: '78200-000', rua: 'Avenida do Transporte', numero: '700', bairro: 'Centro', uf: 'MT', cidade: 'Cáceres', isOnline: true, workingHours: 'Dom-Dom, 06:00 às 20:00' },
 ];
 
 const INITIAL_CONTRATANTE_DETAILS = [];
 
-const INITIAL_SERVICES = [];
+const INITIAL_SERVICES = [
+  { id: 's1', worker_id: 'w1', titulo: 'Instalação de Tomadas e Disjuntores', preco_base: 80, descricao: 'Serviço rápido e seguro para sua residência.', imagem_url: 'https://images.unsplash.com/photo-1555664424-778a1e5e1b48?w=500&h=300&fit=crop' },
+  { id: 's2', worker_id: 'w1', titulo: 'Troca de Fiação Completa', preco_base: 450, descricao: 'Revisão e troca de fiação antiga para evitar curtos.', imagem_url: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=500&h=300&fit=crop' },
+  { id: 's3', worker_id: 'w2', titulo: 'Conserto de Vazamentos', preco_base: 100, descricao: 'Identificação e conserto de vazamentos em canos de PVC.', imagem_url: 'https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=500&h=300&fit=crop' },
+  { id: 's4', worker_id: 'w2', titulo: 'Instalação de Pias e Vasos', preco_base: 150, descricao: 'Instalação completa de louças sanitárias.', imagem_url: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=500&h=300&fit=crop' },
+  { id: 's5', worker_id: 'w3', titulo: 'Faxina Residencial Completa', preco_base: 180, descricao: 'Limpeza pesada incluindo banheiros, vidros e chão.', imagem_url: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=500&h=300&fit=crop' },
+  { id: 's6', worker_id: 'w3', titulo: 'Limpeza Pós-Obra', preco_base: 250, descricao: 'Remoção de entulhos leves, pó de gesso e cimento.', imagem_url: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=500&h=300&fit=crop' },
+  { id: 's7', worker_id: 'w4', titulo: 'Pintura Residencial (Cômodo)', preco_base: 300, descricao: 'Pintura de até 15m² incluindo preparo da parede.', imagem_url: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=500&h=300&fit=crop' },
+  { id: 's8', worker_id: 'w4', titulo: 'Aplicação de Textura', preco_base: 400, descricao: 'Texturização decorativa para paredes internas.', imagem_url: 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=500&h=300&fit=crop' },
+  { id: 's9', worker_id: 'w5', titulo: 'Montagem de Guarda-Roupa', preco_base: 120, descricao: 'Montagem de guarda-roupas de 2 a 6 portas.', imagem_url: 'https://images.unsplash.com/photo-1505693314120-0d443867891c?w=500&h=300&fit=crop' },
+  { id: 's10', worker_id: 'w5', titulo: 'Montagem de Painel de TV', preco_base: 90, descricao: 'Instalação de painel de TV e suporte na parede.', imagem_url: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=500&h=300&fit=crop' },
+  { id: 's11', worker_id: 'w6', titulo: 'Formatação de Computador', preco_base: 100, descricao: 'Formatação, instalação do Windows e backup de arquivos.', imagem_url: 'https://images.unsplash.com/photo-1593642702821-c823b13eb295?w=500&h=300&fit=crop' },
+  { id: 's12', worker_id: 'w6', titulo: 'Configuração de Roteador Wi-Fi', preco_base: 80, descricao: 'Instalação e configuração de repetidores e redes.', imagem_url: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=500&h=300&fit=crop' },
+  { id: 's13', worker_id: 'w7', titulo: 'Frete Municipal (Pequeno)', preco_base: 150, descricao: 'Transporte de móveis e eletrodomésticos dentro de Cáceres.', imagem_url: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=500&h=300&fit=crop' },
+  { id: 's14', worker_id: 'w7', titulo: 'Mudança Completa Residencial', preco_base: 450, descricao: 'Caminhão baú grande para mudança completa.', imagem_url: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=500&h=300&fit=crop' },
+];
 
 // ==========================================
 // HELPER FUNÇÕES E PERSISTÊNCIA
@@ -140,13 +161,13 @@ export const useAppStore = create((set, get) => ({
   toast: null,
 
   // ---- SETTERS COM PERSISTÊNCIA FIREBASE ----
-  setUsers: (v) => { set({ users: v }); saveToFirebase('maos_v14_users', v); },
-  setWorkerDetails: (v) => { set({ workerDetails: v }); saveToFirebase('maos_v14_worker_details', v); },
-  setContratanteDetails: (v) => { set({ contratanteDetails: v }); saveToFirebase('maos_v14_contratante_details', v); },
-  setServices: (v) => { set({ services: v }); saveToFirebase('maos_v14_services', v); },
-  setOrders: (v) => { set({ orders: v }); saveToFirebase('maos_v14_orders', v); },
-  setReviews: (v) => { set({ reviews: v }); saveToFirebase('maos_v14_reviews', v); },
-  setSupportTickets: (v) => { set({ supportTickets: v }); saveToFirebase('maos_v14_support_tickets', v); },
+  setUsers: (v) => { set({ users: v }); saveToFirebase('maos_v15_users', v); },
+  setWorkerDetails: (v) => { set({ workerDetails: v }); saveToFirebase('maos_v15_worker_details', v); },
+  setContratanteDetails: (v) => { set({ contratanteDetails: v }); saveToFirebase('maos_v15_contratante_details', v); },
+  setServices: (v) => { set({ services: v }); saveToFirebase('maos_v15_services', v); },
+  setOrders: (v) => { set({ orders: v }); saveToFirebase('maos_v15_orders', v); },
+  setReviews: (v) => { set({ reviews: v }); saveToFirebase('maos_v15_reviews', v); },
+  setSupportTickets: (v) => { set({ supportTickets: v }); saveToFirebase('maos_v15_support_tickets', v); },
 
   setCurrentView: (view) => {
     set({ currentView: view, selectedWorkerId: null, selectedClientId: null });
@@ -267,13 +288,13 @@ export const useAppStore = create((set, get) => ({
       if (loadedCount === 7) set({ isLoaded: true });
     };
 
-    syncWithFirebase('maos_v14_users', INITIAL_USERS, (data) => { set({ users: data }); checkLoaded(); });
-    syncWithFirebase('maos_v14_worker_details', INITIAL_WORKER_DETAILS, (data) => { set({ workerDetails: data }); checkLoaded(); });
-    syncWithFirebase('maos_v14_contratante_details', INITIAL_CONTRATANTE_DETAILS, (data) => { set({ contratanteDetails: data }); checkLoaded(); });
-    syncWithFirebase('maos_v14_services', INITIAL_SERVICES, (data) => { set({ services: data }); checkLoaded(); });
-    syncWithFirebase('maos_v14_orders', [], (data) => { set({ orders: data }); checkLoaded(); });
-    syncWithFirebase('maos_v14_reviews', [], (data) => { set({ reviews: data }); checkLoaded(); });
-    syncWithFirebase('maos_v14_support_tickets', [], (data) => { set({ supportTickets: data }); checkLoaded(); });
+    syncWithFirebase('maos_v15_users', INITIAL_USERS, (data) => { set({ users: data }); checkLoaded(); });
+    syncWithFirebase('maos_v15_worker_details', INITIAL_WORKER_DETAILS, (data) => { set({ workerDetails: data }); checkLoaded(); });
+    syncWithFirebase('maos_v15_contratante_details', INITIAL_CONTRATANTE_DETAILS, (data) => { set({ contratanteDetails: data }); checkLoaded(); });
+    syncWithFirebase('maos_v15_services', INITIAL_SERVICES, (data) => { set({ services: data }); checkLoaded(); });
+    syncWithFirebase('maos_v15_orders', [], (data) => { set({ orders: data }); checkLoaded(); });
+    syncWithFirebase('maos_v15_reviews', [], (data) => { set({ reviews: data }); checkLoaded(); });
+    syncWithFirebase('maos_v15_support_tickets', [], (data) => { set({ supportTickets: data }); checkLoaded(); });
   }
 }));
 
