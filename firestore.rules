@@ -19,19 +19,36 @@ service cloud.firestore {
       return isAuthenticated() && getUserData().role == 'ADMIN';
     }
 
+    function orderData(orderId) {
+      return get(/databases/$(database)/documents/orders/$(orderId)).data;
+    }
+
     // Regras para Usuários (users)
     match /users/{userId} {
       allow read: if isAuthenticated();
-      allow create: if isAuthenticated() && request.auth.uid == userId;
-      allow update: if isOwner(userId) || isAdmin();
+      // Ninguém se cadastra como ADMIN; trabalhador nasce PENDING (aprovação do admin)
+      allow create: if isOwner(userId)
+        && request.resource.data.role in ['CONTRATANTE', 'TRABALHADOR']
+        && (request.resource.data.role == 'CONTRATANTE'
+            || request.resource.data.status == 'PENDING');
+      // Dono edita o próprio perfil, mas não pode alterar role nem status (só admin)
+      allow update: if isAdmin()
+        || (isOwner(userId)
+            && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'status']));
       allow delete: if isAdmin();
     }
 
     // Regras para Trabalhadores (workers)
+    // Doc público do catálogo: carrega cópia desnormalizada de nome, foto,
+    // telefone e status vindos de users (o telefone é contato público por design).
     match /workers/{workerId} {
       allow read: if true; // Leitura pública do catálogo de prestadores
-      allow create: if isAuthenticated() && request.auth.uid == workerId;
-      allow update: if isOwner(workerId) || isAdmin();
+      allow create: if isAdmin()
+        || (isOwner(workerId) && request.resource.data.status == 'PENDING');
+      // Dono edita o próprio doc, mas não o status (aprovação é só do admin)
+      allow update: if isAdmin()
+        || (isOwner(workerId)
+            && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['status']));
       allow delete: if isAdmin();
     }
 
@@ -78,7 +95,26 @@ service cloud.firestore {
     // Regras para Avaliações (reviews)
     match /reviews/{reviewId} {
       allow read: if true;
-      allow create: if isAuthenticated();
+      // Toda avaliação nasce de um pedido CONCLUIDO entre as partes.
+      // O id é determinístico: `${order_id}_c` (cliente avalia) ou `${order_id}_w`
+      // (trabalhador avalia). Como update é só de admin, cada lado avalia
+      // cada pedido no máximo uma vez.
+      allow create: if isAuthenticated()
+        && request.resource.data.isWorkerReview is bool
+        && request.resource.data.nota is number
+        && request.resource.data.nota >= 1
+        && request.resource.data.nota <= 5
+        && request.resource.data.order_id is string
+        && reviewId == request.resource.data.order_id
+             + (request.resource.data.isWorkerReview ? '_w' : '_c')
+        && orderData(request.resource.data.order_id).status == 'CONCLUIDO'
+        && (request.resource.data.isWorkerReview
+              ? (orderData(request.resource.data.order_id).worker_id == request.auth.uid
+                 && orderData(request.resource.data.order_id).contratante_id == request.resource.data.user_id
+                 && request.resource.data.worker_id == request.auth.uid)
+              : (orderData(request.resource.data.order_id).contratante_id == request.auth.uid
+                 && orderData(request.resource.data.order_id).worker_id == request.resource.data.worker_id
+                 && request.resource.data.user_id == request.auth.uid));
       allow update, delete: if isAdmin();
     }
 

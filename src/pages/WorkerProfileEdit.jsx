@@ -26,6 +26,7 @@ export default function WorkerProfileEdit() {
   const handleUpdateAvatar = async (url) => {
     try {
       await updateUserProfile(currentUser.id, { foto_perfil_url: url });
+      await updateWorkerDetails(currentUser.id, { foto_perfil_url: url });
       setCurrentUser({ ...currentUser, foto_perfil_url: url });
       showToast('Foto de perfil atualizada!');
     } catch {
@@ -210,6 +211,7 @@ export default function WorkerProfileEdit() {
                   onBlur={async (e) => {
                     const novoTel = e.target.value;
                     await updateUserProfile(currentUser.id, { telefone: novoTel });
+                    await updateWorkerDetails(currentUser.id, { telefone: novoTel });
                     setCurrentUser({ ...currentUser, telefone: novoTel });
                     showToast('Telefone atualizado com sucesso!');
                   }}

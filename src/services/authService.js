@@ -7,7 +7,6 @@ import {
   onAuthStateChanged
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { INITIAL_USERS } from './seedService';
 
 /**
  * Registra um novo usuário no Firebase Auth e cria o perfil no Firestore.
@@ -19,14 +18,12 @@ export async function registerUser({ email, senha, nome, telefone, role, foto_pe
     const cred = await createUserWithEmailAndPassword(auth, email, senha);
     userUid = cred.user.uid;
   } catch (error) {
-    // Se o email já existe ou Firebase Auth falhar em modo offline, gera ID único seguro
     if (error.code === 'auth/email-already-in-use') {
       throw new Error('Este email já está cadastrado no sistema.', { cause: error });
     } else if (error.code === 'auth/weak-password') {
       throw new Error('A senha deve ter pelo menos 6 caracteres.', { cause: error });
     }
-    // Fallback de contingência caso Firebase Auth esteja sem provedor habilitado
-    userUid = 'u_' + Date.now();
+    throw new Error('Erro ao criar a conta. Tente novamente.', { cause: error });
   }
 
   const status = role === 'TRABALHADOR' ? 'PENDING' : 'APPROVED';
@@ -52,6 +49,11 @@ export async function registerUser({ email, senha, nome, telefone, role, foto_pe
       id: userUid,
       user_id: userUid,
       ...specificData,
+      // Cópia desnormalizada dos dados públicos (workers é legível sem login)
+      nome,
+      telefone,
+      foto_perfil_url: userData.foto_perfil_url,
+      status,
       nota_media: 0,
       portfolio_fotos: [],
       isOnline: true,
@@ -88,16 +90,6 @@ export async function loginUser(email, senha) {
       nome: cred.user.displayName || 'Usuário'
     };
   } catch (error) {
-    // Suporte a contas de teste rápidas (mock contas padrão)
-    const mockMatch = INITIAL_USERS.find((u) => u.email === email);
-    if (mockMatch && (senha === '123' || senha === '123456')) {
-      const userDoc = await getDoc(doc(db, 'users', mockMatch.id));
-      if (userDoc.exists()) {
-        return { id: userDoc.id, ...userDoc.data() };
-      }
-      return mockMatch;
-    }
-
     if (
       error.code === 'auth/user-not-found' ||
       error.code === 'auth/wrong-password' ||

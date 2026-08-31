@@ -5,15 +5,19 @@ import {
   doc,
   addDoc,
   updateDoc,
+  query,
+  where,
   onSnapshot
 } from 'firebase/firestore';
 
 /**
  * Escuta em tempo real os tickets de suporte.
+ * Passa userId para filtrar os tickets do próprio usuário; null (admin) escuta todos.
  */
-export function subscribeToSupportTickets(onUpdate) {
+export function subscribeToSupportTickets(userId, onUpdate) {
   const ticketsRef = collection(db, 'supportTickets');
-  return onSnapshot(ticketsRef, (snapshot) => {
+  const q = userId ? query(ticketsRef, where('user_id', '==', userId)) : ticketsRef;
+  return onSnapshot(q, (snapshot) => {
     const list = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
     onUpdate(list);
   });

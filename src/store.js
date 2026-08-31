@@ -2,7 +2,6 @@
 import { create } from 'zustand';
 import { playNotificationSound } from './utils/audio';
 import { getEstimatedDistance } from './utils/geo';
-import { seedFirestoreIfEmpty, INITIAL_USERS, INITIAL_WORKER_DETAILS, INITIAL_SERVICES } from './services/seedService';
 import {
   registerUser,
   loginUser,
@@ -63,6 +62,26 @@ export const sendPushNotification = (title, body) => {
   }
 };
 
+// Listeners do Firestore que dependem do usuário logado (religados a cada mudança de auth)
+let firebaseStarted = false;
+let userUnsubs = [];
+
+function stopUserSubscriptions() {
+  userUnsubs.forEach((unsub) => unsub && unsub());
+  userUnsubs = [];
+}
+
+function startUserSubscriptions(user, set) {
+  stopUserSubscriptions();
+  userUnsubs = [
+    subscribeToUsers((users) => set({ users })),
+    subscribeToClients((contratanteDetails) => set({ contratanteDetails })),
+    // As regras do Firestore exigem query filtrada pelo participante (admin escuta tudo)
+    subscribeToOrders(user.id, user.role, (orders) => set({ orders })),
+    subscribeToSupportTickets(user.role === 'ADMIN' ? null : user.id, (supportTickets) => set({ supportTickets }))
+  ];
+}
+
 // Recupera usuário inicial salvo na sessão
 let initialUser = null;
 try {
@@ -85,10 +104,10 @@ export const useAppStore = create((set, get) => ({
   // ---- ESTADO ----
   isLoaded: false,
   currentUser: initialUser,
-  users: INITIAL_USERS,
-  workerDetails: INITIAL_WORKER_DETAILS,
+  users: [],
+  workerDetails: [],
   contratanteDetails: [],
-  services: INITIAL_SERVICES,
+  services: [],
   orders: [],
   reviews: [],
   supportTickets: [],
@@ -118,6 +137,7 @@ export const useAppStore = create((set, get) => ({
     try {
       const user = await loginUser(email, senha);
       if (user.role === 'TRABALHADOR' && user.status === 'PENDING') {
+        await logoutUser();
         showToast('Cadastro ainda em análise pela equipe. Aguarde a aprovação.', 'warning');
         return false;
       }
@@ -198,23 +218,30 @@ export const useAppStore = create((set, get) => ({
 
   // ---- INICIALIZAÇÃO E LISTENERS DO FIREBASE ----
   initFirebase: () => {
-    // Executa o seed de carga inicial se necessário
-    seedFirestoreIfEmpty();
+    if (firebaseStarted) return;
+    firebaseStarted = true;
 
-    // Inscrição em tempo real aos documentos granulares
-    subscribeToUsers((users) => set({ users }));
+    // Coleções públicas (catálogo): leitura liberada nas regras
     subscribeToWorkers((workerDetails) => set({ workerDetails }));
-    subscribeToClients((contratanteDetails) => set({ contratanteDetails }));
     subscribeToServices((services) => set({ services }));
-    subscribeToOrders(null, null, (orders) => set({ orders }));
     subscribeToReviews((reviews) => set({ reviews }));
-    subscribeToSupportTickets((supportTickets) => set({ supportTickets }));
 
-    // Monitora auth state
-    subscribeToAuth((user) => {
+    // Firebase Auth é a fonte de verdade da sessão
+    subscribeToAuth(async (user) => {
+      const { setCurrentUser } = get();
       if (user) {
-        set({ currentUser: user });
-        localStorage.setItem('maos_currentUser', JSON.stringify(user));
+        // Trabalhador pendente não entra, mesmo com sessão persistida
+        if (user.role === 'TRABALHADOR' && user.status === 'PENDING') {
+          await logoutUser();
+          setCurrentUser(null);
+          return;
+        }
+        setCurrentUser(user);
+        startUserSubscriptions(user, set);
+      } else {
+        stopUserSubscriptions();
+        setCurrentUser(null);
+        set({ users: [], contratanteDetails: [], orders: [], supportTickets: [] });
       }
     });
 

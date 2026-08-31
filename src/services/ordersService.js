@@ -4,6 +4,7 @@ import {
   collection,
   doc,
   addDoc,
+  setDoc,
   updateDoc,
   query,
   where,
@@ -112,12 +113,14 @@ export function subscribeToReviews(onUpdate) {
 
 /**
  * Cria uma nova avaliação após a conclusão do serviço.
+ * Id determinístico (`${order_id}_c` ou `_w`): garante 1 avaliação por pedido
+ * por lado — as regras só permitem create, então a segunda tentativa falha.
  */
 export async function createReview(reviewData) {
-  const reviewsRef = collection(db, 'reviews');
-  const docRef = await addDoc(reviewsRef, {
+  const reviewId = `${reviewData.order_id}_${reviewData.isWorkerReview ? 'w' : 'c'}`;
+  await setDoc(doc(db, 'reviews', reviewId), {
     ...reviewData,
     createdAt: new Date().toISOString()
   });
-  return docRef.id;
+  return reviewId;
 }

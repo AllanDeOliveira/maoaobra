@@ -95,11 +95,12 @@ export async function updateClientDetails(clientId, data) {
 }
 
 /**
- * Aprova o cadastro de um trabalhador pelo Admin.
+ * Aprova o cadastro de um trabalhador pelo Admin (users + cópia pública em workers).
  */
 export async function approveWorkerStatus(workerId) {
   const userRef = doc(db, 'users', workerId);
   await updateDoc(userRef, { status: 'APPROVED' });
+  await setDoc(doc(db, 'workers', workerId), { status: 'APPROVED' }, { merge: true });
 }
 
 /**

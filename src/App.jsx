@@ -1,5 +1,5 @@
 // src/App.jsx — Roteador principal com React Router e autenticação Firebase
-import { useEffect } from 'react';
+import { useEffect, Component, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAppStore } from './store';
 
@@ -8,28 +8,65 @@ import NavBar from './components/layout/NavBar';
 import SupportWidget from './components/layout/SupportWidget';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
-import LoginScreen from './pages/LoginScreen';
-import RegisterScreen from './pages/RegisterScreen';
-import HomeContratante from './pages/HomeContratante';
-import WorkerProfileDetail from './pages/WorkerProfileDetail';
-import ClientOrders from './pages/ClientOrders';
-import ProfileUser from './pages/ProfileUser';
-import ClientProfileDetail from './pages/ClientProfileDetail';
-import ActiveChats from './pages/ActiveChats';
+// Páginas em lazy loading: cada rota vira um chunk próprio (recharts só carrega no dashboard do trabalhador)
+const LoginScreen = lazy(() => import('./pages/LoginScreen'));
+const RegisterScreen = lazy(() => import('./pages/RegisterScreen'));
+const HomeContratante = lazy(() => import('./pages/HomeContratante'));
+const WorkerProfileDetail = lazy(() => import('./pages/WorkerProfileDetail'));
+const ClientOrders = lazy(() => import('./pages/ClientOrders'));
+const ProfileUser = lazy(() => import('./pages/ProfileUser'));
+const ClientProfileDetail = lazy(() => import('./pages/ClientProfileDetail'));
+const ActiveChats = lazy(() => import('./pages/ActiveChats'));
 
-import WorkerDashboard from './pages/WorkerDashboard';
-import WorkerServicesCRUD from './pages/WorkerServicesCRUD';
-import WorkerHistory from './pages/WorkerHistory';
-import WorkerProfileEdit from './pages/WorkerProfileEdit';
+const WorkerDashboard = lazy(() => import('./pages/WorkerDashboard'));
+const WorkerServicesCRUD = lazy(() => import('./pages/WorkerServicesCRUD'));
+const WorkerHistory = lazy(() => import('./pages/WorkerHistory'));
+const WorkerProfileEdit = lazy(() => import('./pages/WorkerProfileEdit'));
 
-import AdminDashboard from './pages/AdminDashboard';
-import {
-  AdminClients,
-  AdminWorkers,
-  AdminApprovals,
-  AdminSupport,
-  AdminChats
-} from './pages/AdminPages';
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
+const adminPage = (name) => lazy(() => import('./pages/AdminPages').then((m) => ({ default: m[name] })));
+const AdminClients = adminPage('AdminClients');
+const AdminWorkers = adminPage('AdminWorkers');
+const AdminApprovals = adminPage('AdminApprovals');
+const AdminSupport = adminPage('AdminSupport');
+const AdminChats = adminPage('AdminChats');
+
+class ErrorBoundary extends Component {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, info) {
+    console.error('Erro não tratado na interface:', error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-[#F9FAFB] flex flex-col items-center justify-center p-8 text-center">
+          <i className="ph-fill ph-warning-circle text-6xl text-[#EA1D2C] mb-4" />
+          <h2 className="text-xl font-extrabold text-[#1F2937] mb-2">Algo deu errado.</h2>
+          <p className="text-gray-500 mb-6">Recarregue a página para continuar.</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-[#EA1D2C] text-white font-bold px-6 py-2.5 rounded-xl"
+          >
+            Recarregar
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+const PageLoader = () => (
+  <div className="flex items-center justify-center py-24">
+    <div className="w-10 h-10 border-4 border-[#EA1D2C] border-t-transparent rounded-full animate-spin" />
+  </div>
+);
 
 function AppLayout() {
   const location = useLocation();
@@ -102,6 +139,7 @@ function AppLayout() {
       {!isAuthScreen && <NavBar />}
 
       <main className={`flex-1 w-full relative z-10 ${navPaddingClass} pb-4`}>
+        <Suspense fallback={<PageLoader />}>
         <Routes>
           {/* Rotas Públicas */}
           <Route path="/" element={<HomeContratante />} />
@@ -223,6 +261,7 @@ function AppLayout() {
           {/* Fallback para qualquer rota não mapeada */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        </Suspense>
       </main>
 
       <SupportWidget />
@@ -247,8 +286,10 @@ function AppLayout() {
 export default function App() {
   const basename = import.meta.env.BASE_URL || '/';
   return (
-    <BrowserRouter basename={basename}>
-      <AppLayout />
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter basename={basename}>
+        <AppLayout />
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }

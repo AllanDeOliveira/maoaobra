@@ -1,7 +1,7 @@
 {
-  "name": "app",
+  "name": "maoaobra",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "homepage": "https://Kanastrilha.github.io/maoaobra",
   "scripts": {

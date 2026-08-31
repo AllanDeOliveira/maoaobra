@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useAppStore, getEstimatedDistance } from '../store';
+import { useAppStore, getEstimatedDistance, isWorkerOnline } from '../store';
 import StarRating from '../components/ui/StarRating';
 import ReviewModal from '../components/modals/ReviewModal';
 import { createOrder, createReview } from '../services/ordersService';
@@ -21,8 +21,9 @@ export default function WorkerProfileDetail() {
     orders
   } = useAppStore();
 
-  const worker = users.find((u) => u.id === workerId);
   const details = workerDetails.find((d) => d.user_id === workerId || d.id === workerId);
+  // Deslogado não lê a coleção users; o doc público de workers tem nome/foto/telefone desnormalizados
+  const worker = users.find((u) => u.id === workerId) || details;
   const workerServices = services.filter((s) => s.worker_id === workerId);
   const workerReviews = reviews.filter((r) => r.worker_id === workerId && !r.isWorkerReview);
   const [activeTab, setActiveTab] = useState('SOBRE');
@@ -37,9 +38,9 @@ export default function WorkerProfileDetail() {
   const userFinishedOrders = currentUser
     ? orders.filter((o) => o.contratante_id === currentUser.id && o.worker_id === workerId && o.status === 'CONCLUIDO')
     : [];
-  const canReview =
-    userFinishedOrders.length > 0 &&
-    workerReviews.filter((r) => r.user_id === currentUser?.id).length < userFinishedOrders.length;
+  // Reviews têm id determinístico `${order_id}_c`: cada pedido concluído dá direito a uma avaliação
+  const orderToReview = userFinishedOrders.find((o) => !reviews.some((r) => r.id === `${o.id}_c`));
+  const canReview = Boolean(orderToReview);
 
   const myDetails = currentUser
     ? contratanteDetails.find((d) => d.user_id === currentUser.id) ||
@@ -49,25 +50,7 @@ export default function WorkerProfileDetail() {
 
   const horaInicio = details?.horaInicio || '08:00';
   const horaFim = details?.horaFim || '18:00';
-
-  let isWithinHours = true;
-  try {
-    const agora = new Date();
-    const horaAtual = agora.getHours() * 60 + agora.getMinutes();
-    const [hI, mI] = horaInicio.split(':').map(Number);
-    const inicioMinutos = hI * 60 + mI;
-    const [hF, mF] = horaFim.split(':').map(Number);
-    let fimMinutos = hF * 60 + mF;
-    if (fimMinutos < inicioMinutos) fimMinutos += 24 * 60;
-    let adjustedAtual = horaAtual;
-    if (horaAtual < inicioMinutos && fimMinutos > 24 * 60) adjustedAtual += 24 * 60;
-
-    if (adjustedAtual < inicioMinutos || adjustedAtual > fimMinutos) isWithinHours = false;
-  } catch {
-    isWithinHours = true;
-  }
-
-  const finalIsOnline = details?.isOnline && isWithinHours;
+  const finalIsOnline = isWorkerOnline(details);
   const diasTrabalho = details?.diasTrabalho || details?.workingHours?.split(',')[0] || 'Seg-Sex';
   const workingHoursDisplay = `${diasTrabalho}, ${horaInicio} às ${horaFim}`;
 
@@ -422,6 +405,7 @@ export default function WorkerProfileDetail() {
           onSubmit={async (nota, comentario) => {
             try {
               await createReview({
+                order_id: orderToReview.id,
                 worker_id: workerId,
                 user_id: currentUser.id,
                 nota,

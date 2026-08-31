@@ -18,33 +18,31 @@ const CAT_ICONS = {
 
 export default function HomeContratante() {
   const navigate = useNavigate();
-  const { users, workerDetails, contratanteDetails, reviews, currentUser } = useAppStore();
+  const { workerDetails, contratanteDetails, reviews, currentUser } = useAppStore();
   const [selectedCategory, setSelectedCategory] = useState('Todos');
   const [searchQuery, setSearchQuery] = useState('');
 
   const myDetails = currentUser ? contratanteDetails.find((d) => d.user_id === currentUser.id) : null;
-  const workers = users.filter((u) => u.role === 'TRABALHADOR' && u.status === 'APPROVED');
+  // O doc de workers é público e traz nome/foto/status desnormalizados — o catálogo funciona deslogado
+  const workers = workerDetails.filter((d) => d.status === 'APPROVED');
 
   const filteredWorkers = workers
     .filter((w) => {
-      const d = workerDetails.find((x) => x.user_id === w.id || x.id === w.id);
-      const matchCat = selectedCategory === 'Todos' || d?.categorias?.some((c) => c === selectedCategory);
+      const matchCat = selectedCategory === 'Todos' || w.categorias?.some((c) => c === selectedCategory);
       const q = searchQuery.toLowerCase();
       const matchSearch =
         !q ||
-        w.nome.toLowerCase().includes(q) ||
-        d?.categorias?.some((c) => c.toLowerCase().includes(q)) ||
-        d?.bio?.toLowerCase().includes(q) ||
-        d?.bairro?.toLowerCase().includes(q) ||
-        d?.cidade?.toLowerCase().includes(q);
+        w.nome?.toLowerCase().includes(q) ||
+        w.categorias?.some((c) => c.toLowerCase().includes(q)) ||
+        w.bio?.toLowerCase().includes(q) ||
+        w.bairro?.toLowerCase().includes(q) ||
+        w.cidade?.toLowerCase().includes(q);
       return matchCat && matchSearch;
     })
     .sort((a, b) => {
       if (!myDetails) return 0;
-      const dA = workerDetails.find((x) => x.user_id === a.id || x.id === a.id);
-      const dB = workerDetails.find((x) => x.user_id === b.id || x.id === b.id);
-      const distA = parseFloat(getEstimatedDistance(myDetails, dA)) || Infinity;
-      const distB = parseFloat(getEstimatedDistance(myDetails, dB)) || Infinity;
+      const distA = parseFloat(getEstimatedDistance(myDetails, a)) || Infinity;
+      const distB = parseFloat(getEstimatedDistance(myDetails, b)) || Infinity;
       return distA - distB;
     });
 
@@ -123,7 +121,7 @@ export default function HomeContratante() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {filteredWorkers.map((w) => {
-              const details = workerDetails.find((d) => d.user_id === w.id || d.id === w.id);
+              const details = w;
               const workerReviews = reviews.filter((r) => r.worker_id === w.id && !r.isWorkerReview);
               const dynamicRating =
                 workerReviews.length > 0

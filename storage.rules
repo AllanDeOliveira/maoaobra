@@ -5,30 +5,38 @@ service firebase.storage {
     function isAuthenticated() {
       return request.auth != null;
     }
-    
+
+    // Só aceita imagens de até 5MB (delete envia resource nulo e continua permitido ao dono)
+    function isValidImage() {
+      return request.resource == null
+        || (request.resource.size < 5 * 1024 * 1024
+            && request.resource.contentType.matches('image/.*'));
+    }
+
     // Fotos de perfil, serviços e anexos de chat
     match /avatars/{userId}/{allPaths=**} {
       allow read: if true;
-      allow write: if isAuthenticated() && request.auth.uid == userId;
+      allow write: if isAuthenticated() && request.auth.uid == userId && isValidImage();
     }
 
     match /services/{workerId}/{allPaths=**} {
       allow read: if true;
-      allow write: if isAuthenticated() && request.auth.uid == workerId;
+      allow write: if isAuthenticated() && request.auth.uid == workerId && isValidImage();
     }
 
     match /portfolio/{workerId}/{allPaths=**} {
       allow read: if true;
-      allow write: if isAuthenticated() && request.auth.uid == workerId;
+      allow write: if isAuthenticated() && request.auth.uid == workerId && isValidImage();
     }
 
+    // ponytail: qualquer autenticado escreve em qualquer pasta de chat; restringir aos participantes do pedido via firestore.get() se houver abuso
     match /chat_attachments/{orderId}/{allPaths=**} {
-      allow read, write: if isAuthenticated();
+      allow read, write: if isAuthenticated() && isValidImage();
     }
 
     match /uploads/{allPaths=**} {
       allow read: if true;
-      allow write: if isAuthenticated();
+      allow write: if isAuthenticated() && isValidImage();
     }
   }
 }

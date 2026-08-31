@@ -37,9 +37,9 @@ export default function ClientProfileDetail() {
   const myFinishedOrders = currentUser
     ? orders.filter((o) => o.worker_id === currentUser.id && o.contratante_id === clientId && o.status === 'CONCLUIDO')
     : [];
-  const canReview =
-    myFinishedOrders.length > 0 &&
-    clientReviews.filter((r) => r.worker_id === currentUser.id).length < myFinishedOrders.length;
+  // Reviews têm id determinístico `${order_id}_w`: cada pedido concluído dá direito a uma avaliação
+  const orderToReview = myFinishedOrders.find((o) => !reviews.some((r) => r.id === `${o.id}_w`));
+  const canReview = Boolean(orderToReview);
 
   return (
     <div className="pb-28 animate-fade-in w-full">
@@ -115,6 +115,7 @@ export default function ClientProfileDetail() {
           onSubmit={async (nota, comentario) => {
             try {
               await createReview({
+                order_id: orderToReview.id,
                 worker_id: currentUser.id,
                 user_id: clientId,
                 nota,
