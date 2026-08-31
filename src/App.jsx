@@ -1,10 +1,12 @@
-// src/App.jsx — Router completo
+// src/App.jsx — Roteador principal com React Router e autenticação Firebase
 import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAppStore } from './store';
 
 import Toast from './components/ui/Toast';
 import NavBar from './components/layout/NavBar';
 import SupportWidget from './components/layout/SupportWidget';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 
 import LoginScreen from './pages/LoginScreen';
 import RegisterScreen from './pages/RegisterScreen';
@@ -13,6 +15,7 @@ import WorkerProfileDetail from './pages/WorkerProfileDetail';
 import ClientOrders from './pages/ClientOrders';
 import ProfileUser from './pages/ProfileUser';
 import ClientProfileDetail from './pages/ClientProfileDetail';
+import ActiveChats from './pages/ActiveChats';
 
 import WorkerDashboard from './pages/WorkerDashboard';
 import WorkerServicesCRUD from './pages/WorkerServicesCRUD';
@@ -20,46 +23,34 @@ import WorkerHistory from './pages/WorkerHistory';
 import WorkerProfileEdit from './pages/WorkerProfileEdit';
 
 import AdminDashboard from './pages/AdminDashboard';
-import { AdminClients, AdminWorkers, AdminApprovals, AdminSupport, AdminChats } from './pages/AdminPages';
-import ActiveChats from './pages/ActiveChats';
+import {
+  AdminClients,
+  AdminWorkers,
+  AdminApprovals,
+  AdminSupport,
+  AdminChats
+} from './pages/AdminPages';
 
-function AppRouter() {
-  const {
-    currentView, currentUser,
-    selectedWorkerId, setSelectedWorkerId,
-    selectedClientId, setSelectedClientId,
-    setCurrentView,
-    isLoaded, initFirebase
-  } = useAppStore();
+function AppLayout() {
+  const location = useLocation();
+  const { currentUser, isLoaded, initFirebase, logout, showToast } = useAppStore();
 
   useEffect(() => {
     initFirebase();
     // Solicita localização do usuário
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (pos) => console.log('Location granted:', pos.coords.latitude, pos.coords.longitude),
-        (err) => console.log('Location denied/error:', err)
+        (pos) => {
+          // Atualiza coordenadas no estado se disponível
+          const myCoords = { latitude: pos.coords.latitude, longitude: pos.coords.longitude };
+          useAppStore.setState({ userCoords: myCoords });
+        },
+        (err) => console.log('Localização não autorizada:', err.message)
       );
     }
   }, [initFirebase]);
 
-  // History API
-  useEffect(() => {
-    const handler = (e) => {
-      if (e.state) {
-        useAppStore.setState({
-          currentView: e.state.view || 'HOME',
-          selectedWorkerId: e.state.workerId || null,
-          selectedClientId: e.state.clientId || null,
-        });
-      }
-    };
-    window.addEventListener('popstate', handler);
-    window.history.replaceState({ view: currentView, workerId: null, clientId: null }, '', window.location.pathname);
-    return () => window.removeEventListener('popstate', handler);
-  }, []);
-
-  // Inactivity Timeout
+  // Inactivity Timeout (30 minutos)
   useEffect(() => {
     let timeout;
     const resetTimer = () => {
@@ -67,8 +58,8 @@ function AppRouter() {
         localStorage.setItem('maos_lastActivity', Date.now().toString());
         clearTimeout(timeout);
         timeout = setTimeout(() => {
-          useAppStore.getState().logout();
-          useAppStore.getState().showToast('Sessão expirada por inatividade (30 min)', 'warning');
+          logout();
+          showToast('Sessão expirada por inatividade (30 min)', 'warning');
         }, 30 * 60 * 1000);
       }
     };
@@ -79,14 +70,14 @@ function AppRouter() {
       window.addEventListener('keypress', resetTimer);
       window.addEventListener('touchstart', resetTimer);
     }
-    
+
     return () => {
       clearTimeout(timeout);
       window.removeEventListener('mousemove', resetTimer);
       window.removeEventListener('keypress', resetTimer);
       window.removeEventListener('touchstart', resetTimer);
     };
-  }, [currentUser]);
+  }, [currentUser, logout, showToast]);
 
   if (!isLoaded) {
     return (
@@ -97,42 +88,141 @@ function AppRouter() {
     );
   }
 
-  const hideNav = currentView === 'LOGIN' || currentView === 'REGISTER' || !!selectedWorkerId;
-  const navPaddingClass = !hideNav ? (!currentUser ? 'pt-20' : 'md:pt-20') : '';
-  const footerPadding = (!currentUser || hideNav) ? 'pb-6' : 'pb-24 md:pb-6';
-
-  let content;
-  if (currentView === 'LOGIN')              content = <LoginScreen />;
-  else if (currentView === 'REGISTER')      content = <RegisterScreen />;
-  else if (selectedWorkerId)                content = <WorkerProfileDetail workerId={selectedWorkerId} onBack={() => setSelectedWorkerId(null)} />;
-  else if (selectedClientId)                content = <ClientProfileDetail clientId={selectedClientId} onBack={() => setSelectedClientId(null)} />;
-  else if (currentView === 'HOME')          content = <HomeContratante onSelectWorker={setSelectedWorkerId} />;
-  else if (currentView === 'CHATS')         content = <ActiveChats />;
-  else if (currentView === 'ORDERS')        content = <ClientOrders />;
-  else if (currentView === 'PROFILE')       content = <ProfileUser />;
-  else if (currentView === 'WORKER_DASH')   content = <WorkerDashboard />;
-  else if (currentView === 'WORKER_SERVICES') content = <WorkerServicesCRUD />;
-  else if (currentView === 'WORKER_HISTORY')  content = <WorkerHistory />;
-  else if (currentView === 'WORKER_PROFILE')  content = <WorkerProfileEdit />;
-  else if (currentView === 'ADMIN_DASH')    content = <AdminDashboard />;
-  else if (currentView === 'ADMIN_CLIENTS') content = <AdminClients />;
-  else if (currentView === 'ADMIN_WORKERS') content = <AdminWorkers />;
-  else if (currentView === 'ADMIN_APPROVALS') content = <AdminApprovals />;
-  else if (currentView === 'ADMIN_SUPPORT') content = <AdminSupport />;
-  else if (currentView === 'ADMIN_CHATS')   content = <AdminChats />;
-  else                                      content = <HomeContratante onSelectWorker={setSelectedWorkerId} />;
+  const isAuthScreen = location.pathname === '/login' || location.pathname === '/cadastro';
+  const navPaddingClass = !isAuthScreen ? (!currentUser ? 'pt-20' : 'md:pt-20') : '';
+  const footerPadding = !currentUser || isAuthScreen ? 'pb-6' : 'pb-24 md:pb-6';
 
   return (
     <div className="min-h-screen bg-[#F9FAFB] flex flex-col font-sans relative">
-      {/* Decoração de fundo */}
+      {/* Decoração de fundo suave */}
       <div className="fixed top-[-10%] left-[-10%] w-[500px] h-[500px] bg-red-500/5 rounded-full blur-[100px] pointer-events-none z-0" />
       <div className="fixed bottom-[20%] right-[-10%] w-[600px] h-[600px] bg-orange-500/5 rounded-full blur-[120px] pointer-events-none z-0" />
 
       <Toast />
-      {!hideNav && <NavBar />}
+      {!isAuthScreen && <NavBar />}
 
       <main className={`flex-1 w-full relative z-10 ${navPaddingClass} pb-4`}>
-        {content}
+        <Routes>
+          {/* Rotas Públicas */}
+          <Route path="/" element={<HomeContratante />} />
+          <Route path="/login" element={<LoginScreen />} />
+          <Route path="/cadastro" element={<RegisterScreen />} />
+          <Route path="/profissional/:workerId" element={<WorkerProfileDetail />} />
+          <Route path="/cliente/:clientId" element={<ClientProfileDetail />} />
+
+          {/* Rotas de Cliente (Contratante) */}
+          <Route
+            path="/pedidos"
+            element={
+              <ProtectedRoute allowedRoles={['CONTRATANTE', 'ADMIN']}>
+                <ClientOrders />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mensagens"
+            element={
+              <ProtectedRoute>
+                <ActiveChats />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/perfil"
+            element={
+              <ProtectedRoute allowedRoles={['CONTRATANTE']}>
+                <ProfileUser />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Rotas de Profissional (Trabalhador) */}
+          <Route
+            path="/trabalhador/dashboard"
+            element={
+              <ProtectedRoute allowedRoles={['TRABALHADOR', 'ADMIN']}>
+                <WorkerDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/trabalhador/servicos"
+            element={
+              <ProtectedRoute allowedRoles={['TRABALHADOR', 'ADMIN']}>
+                <WorkerServicesCRUD />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/trabalhador/historico"
+            element={
+              <ProtectedRoute allowedRoles={['TRABALHADOR', 'ADMIN']}>
+                <WorkerHistory />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/trabalhador/perfil"
+            element={
+              <ProtectedRoute allowedRoles={['TRABALHADOR', 'ADMIN']}>
+                <WorkerProfileEdit />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Rotas de Administração */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute allowedRoles={['ADMIN']}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/clientes"
+            element={
+              <ProtectedRoute allowedRoles={['ADMIN']}>
+                <AdminClients />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/profissionais"
+            element={
+              <ProtectedRoute allowedRoles={['ADMIN']}>
+                <AdminWorkers />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/aprovacoes"
+            element={
+              <ProtectedRoute allowedRoles={['ADMIN']}>
+                <AdminApprovals />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/suporte"
+            element={
+              <ProtectedRoute allowedRoles={['ADMIN']}>
+                <AdminSupport />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/chats"
+            element={
+              <ProtectedRoute allowedRoles={['ADMIN']}>
+                <AdminChats />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Fallback para qualquer rota não mapeada */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </main>
 
       <SupportWidget />
@@ -144,8 +234,10 @@ function AppRouter() {
             <span className="text-[#EA1D2C]">A</span>
             <span className="text-[#1F2937]">obra</span>
           </div>
-          <p className="text-xs text-gray-400 font-bold uppercase tracking-wide">© 2026 Todos os direitos reservados.</p>
-          <p className="text-[10px] text-gray-300 font-medium mt-1">v0.1.2</p>
+          <p className="text-xs text-gray-400 font-bold uppercase tracking-wide">
+            © 2026 Todos os direitos reservados.
+          </p>
+          <p className="text-[10px] text-gray-300 font-medium mt-1">v1.0.0 — Arquitetura de Produção</p>
         </div>
       </footer>
     </div>
@@ -153,5 +245,10 @@ function AppRouter() {
 }
 
 export default function App() {
-  return <AppRouter />;
+  const basename = import.meta.env.BASE_URL || '/';
+  return (
+    <BrowserRouter basename={basename}>
+      <AppLayout />
+    </BrowserRouter>
+  );
 }

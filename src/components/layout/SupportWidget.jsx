@@ -1,32 +1,55 @@
-// src/components/layout/SupportWidget.jsx
+// src/components/layout/SupportWidget.jsx — Widget de Suporte com Firestore
 import { useState, useRef, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useAppStore } from '../../store';
+import { createSupportTicket, addMessageToSupportTicket } from '../../services/supportService';
 
 export default function SupportWidget() {
-  const { currentUser, currentView, supportTickets, setSupportTickets, showToast } = useAppStore();
+  const location = useLocation();
+  const { currentUser, supportTickets, showToast } = useAppStore();
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
   const chatRef = useRef(null);
 
-  const myTicket = currentUser ? supportTickets.find(t => t.user_id === currentUser.id && t.status === 'OPEN') : null;
+  const myTicket = currentUser
+    ? supportTickets.find((t) => t.user_id === currentUser.id && t.status === 'OPEN')
+    : null;
 
   useEffect(() => {
-    if (isOpen && chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    if (isOpen && chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
   }, [isOpen, myTicket?.messages]);
 
-  const adminViews = ['ADMIN_DASH','ADMIN_CLIENTS','ADMIN_WORKERS','ADMIN_APPROVALS','ADMIN_SUPPORT','ADMIN_CHATS'];
-  if (adminViews.includes(currentView)) return null;
+  // Oculta widget de suporte no painel do administrador
+  if (location.pathname.startsWith('/admin')) return null;
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!message.trim()) return;
-    if (!currentUser) { showToast('Faça login para usar o suporte.', 'warning'); return; }
-    const newMsg = { sender: 'USER', text: message, time: new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }) };
-    if (myTicket) {
-      setSupportTickets(supportTickets.map(t => t.id === myTicket.id ? { ...t, messages: [...t.messages, newMsg] } : t));
-    } else {
-      setSupportTickets([...supportTickets, { id: 't' + Date.now(), user_id: currentUser.id, status: 'OPEN', messages: [newMsg] }]);
+    if (!currentUser) {
+      showToast('Faça login para utilizar o canal de suporte.', 'warning');
+      return;
     }
-    setMessage('');
+
+    const newMsg = {
+      sender: 'USER',
+      text: message.trim(),
+      time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+    };
+
+    try {
+      if (myTicket) {
+        await addMessageToSupportTicket(myTicket.id, newMsg, myTicket.messages || []);
+      } else {
+        await createSupportTicket({
+          user_id: currentUser.id,
+          messages: [newMsg]
+        });
+      }
+      setMessage('');
+    } catch {
+      showToast('Erro ao enviar mensagem para o suporte.', 'error');
+    }
   };
 
   return (
@@ -51,16 +74,24 @@ export default function SupportWidget() {
                 Olá{currentUser ? `, ${currentUser.nome.split(' ')[0]}` : ''}! Como podemos te ajudar hoje?
               </div>
             </div>
-            {myTicket?.messages.map((msg, i) => (
+            {myTicket?.messages?.map((msg, i) => (
               <div key={i} className={`flex items-start gap-2 ${msg.sender === 'USER' ? 'justify-end' : ''}`}>
                 {msg.sender === 'ADMIN' && (
                   <div className="w-8 h-8 rounded-full bg-[#EA1D2C] flex items-center justify-center text-white shrink-0">
                     <i className="ph-bold ph-robot text-sm" />
                   </div>
                 )}
-                <div className={`p-3 rounded-2xl text-sm shadow-sm ${msg.sender === 'USER' ? 'bg-[#EA1D2C] text-white rounded-tr-none' : 'bg-white border border-gray-200 text-[#1F2937] rounded-tl-none'}`}>
+                <div
+                  className={`p-3 rounded-2xl text-sm shadow-sm ${
+                    msg.sender === 'USER'
+                      ? 'bg-[#EA1D2C] text-white rounded-tr-none'
+                      : 'bg-white border border-gray-200 text-[#1F2937] rounded-tl-none'
+                  }`}
+                >
                   {msg.text}
-                  <div className={`text-[10px] mt-1 text-right ${msg.sender === 'USER' ? 'text-white/70' : 'text-gray-400'}`}>{msg.time}</div>
+                  <div className={`text-[10px] mt-1 text-right ${msg.sender === 'USER' ? 'text-white/70' : 'text-gray-400'}`}>
+                    {msg.time}
+                  </div>
                 </div>
               </div>
             ))}
@@ -69,12 +100,15 @@ export default function SupportWidget() {
             <input
               type="text"
               value={message}
-              onChange={e => setMessage(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleSend()}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
               placeholder="Digite sua dúvida..."
               className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-[#EA1D2C]"
             />
-            <button onClick={handleSend} className="w-10 h-10 rounded-xl bg-[#EA1D2C] text-white flex items-center justify-center hover:bg-[#c41020] transition shrink-0">
+            <button
+              onClick={handleSend}
+              className="w-10 h-10 rounded-xl bg-[#EA1D2C] text-white flex items-center justify-center hover:bg-[#c41020] transition shrink-0"
+            >
               <i className="ph-bold ph-paper-plane-right" />
             </button>
           </div>
@@ -85,7 +119,7 @@ export default function SupportWidget() {
           className="w-12 h-12 md:w-14 md:h-14 bg-[#EA1D2C] text-white rounded-full flex items-center justify-center shadow-lg shadow-red-500/40 hover:scale-110 transition-transform hover:bg-[#c41020] border-2 border-white relative"
         >
           <i className="ph-fill ph-chat-teardrop-dots text-2xl md:text-3xl" />
-          {myTicket?.messages.some(m => m.sender === 'ADMIN') && (
+          {myTicket?.messages?.some((m) => m.sender === 'ADMIN') && (
             <span className="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
           )}
         </button>

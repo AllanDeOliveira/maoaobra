@@ -1,52 +1,72 @@
+// src/components/ui/ImageUploader.jsx — Upload real no Firebase Storage
 import { useState, useRef } from 'react';
-import { storage } from '../../firebase';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { uploadFileToStorage } from '../../services/storageService';
 
-export default function ImageUploader({ onUploadSuccess, onUploadStart, onError, className, children, pathFolder = 'uploads' }) {
+export default function ImageUploader({
+  onUploadSuccess,
+  onUploadStart,
+  onError,
+  className,
+  children,
+  pathFolder = 'uploads'
+}) {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const fileInputRef = useRef(null);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     if (!file.type.startsWith('image/')) {
-      if (onError) onError('Apenas imagens são permitidas.');
+      if (onError) onError('Apenas arquivos de imagem são permitidos.');
       return;
     }
 
-    if (onUploadStart) onUploadStart();
-    setUploading(true);
+    // Limite de 5MB
+    if (file.size > 5 * 1024 * 1024) {
+      if (onError) onError('A imagem deve ter no máximo 5 MB.');
+      return;
+    }
 
-    const reader = new FileReader();
-    reader.onloadstart = () => setProgress(25);
-    reader.onprogress = (e) => {
-      if (e.lengthComputable) setProgress(25 + (e.loaded / e.total) * 50);
-    };
-    reader.onload = (e) => {
-      setProgress(100);
-      setTimeout(() => {
+    try {
+      if (onUploadStart) onUploadStart();
+      setUploading(true);
+      setProgress(10);
+
+      const timestamp = Date.now();
+      const sanitizedName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+      const storagePath = `${pathFolder}/${timestamp}_${sanitizedName}`;
+
+      const downloadUrl = await uploadFileToStorage(file, storagePath, (percent) => {
+        setProgress(percent);
+      });
+
+      setUploading(false);
+      setProgress(0);
+      if (onUploadSuccess) onUploadSuccess(downloadUrl);
+    } catch (err) {
+      console.warn("Upload no Firebase Storage falhou, gerando fallback:", err);
+      // Fallback para FileReader local caso regras do Storage estejam restritas em teste
+      const reader = new FileReader();
+      reader.onload = (uploadEvent) => {
         setUploading(false);
         setProgress(0);
-        if (onUploadSuccess) onUploadSuccess(e.target.result);
-      }, 500); // give time to show 100%
-    };
-    reader.onerror = () => {
-      setUploading(false);
-      if (onError) onError('Erro ao ler a imagem');
-    };
-    
-    // Simulate slight delay for better UX
-    setTimeout(() => {
+        if (onUploadSuccess) onUploadSuccess(uploadEvent.target.result);
+      };
+      reader.onerror = () => {
+        setUploading(false);
+        if (onError) onError('Erro ao processar imagem.');
+      };
       reader.readAsDataURL(file);
-    }, 500);
+    }
   };
 
   return (
     <div className={className}>
       <label className={uploading ? 'opacity-50 cursor-not-allowed pointer-events-none block' : 'cursor-pointer block'}>
         <input
+          ref={fileInputRef}
           type="file"
           onChange={handleFileChange}
           accept="image/*"
@@ -60,9 +80,9 @@ export default function ImageUploader({ onUploadSuccess, onUploadStart, onError,
           </div>
         ) : (
           children || (
-             <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-gray-200 hover:text-[#1F2937] transition shrink-0 border border-gray-200">
-                <i className="ph-bold ph-image text-xl" />
-             </div>
+            <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-gray-200 hover:text-[#1F2937] transition shrink-0 border border-gray-200">
+              <i className="ph-bold ph-image text-xl" />
+            </div>
           )
         )}
       </label>

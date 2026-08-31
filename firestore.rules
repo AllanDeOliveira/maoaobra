@@ -1,0 +1,93 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Funções auxiliares de segurança
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && getUserData().role == 'ADMIN';
+    }
+
+    // Regras para Usuários (users)
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Regras para Trabalhadores (workers)
+    match /workers/{workerId} {
+      allow read: if true; // Leitura pública do catálogo de prestadores
+      allow create: if isAuthenticated() && request.auth.uid == workerId;
+      allow update: if isOwner(workerId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Regras para Contratantes (clients)
+    match /clients/{clientId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isOwner(clientId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Regras para Serviços (services)
+    match /services/{serviceId} {
+      allow read: if true; // Catálogo público
+      allow create: if isAuthenticated() && request.resource.data.worker_id == request.auth.uid;
+      allow update, delete: if isAuthenticated() && (resource.data.worker_id == request.auth.uid || isAdmin());
+    }
+
+    // Regras para Pedidos (orders) e Chat
+    match /orders/{orderId} {
+      allow read: if isAuthenticated() && (
+        resource.data.contratante_id == request.auth.uid || 
+        resource.data.worker_id == request.auth.uid || 
+        isAdmin()
+      );
+      allow create: if isAuthenticated() && request.resource.data.contratante_id == request.auth.uid;
+      allow update: if isAuthenticated() && (
+        resource.data.contratante_id == request.auth.uid || 
+        resource.data.worker_id == request.auth.uid || 
+        isAdmin()
+      );
+      allow delete: if isAdmin();
+
+      // Subcoleção de Mensagens do Chat
+      match /messages/{messageId} {
+        allow read: if isAuthenticated() && (
+          get(/databases/$(database)/documents/orders/$(orderId)).data.contratante_id == request.auth.uid ||
+          get(/databases/$(database)/documents/orders/$(orderId)).data.worker_id == request.auth.uid ||
+          isAdmin()
+        );
+        allow create: if isAuthenticated() && request.resource.data.sender == request.auth.uid;
+      }
+    }
+
+    // Regras para Avaliações (reviews)
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update, delete: if isAdmin();
+    }
+
+    // Regras para Tickets de Suporte (supportTickets)
+    match /supportTickets/{ticketId} {
+      allow read: if isAuthenticated() && (resource.data.user_id == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated() && request.resource.data.user_id == request.auth.uid;
+      allow update: if isAuthenticated() && (resource.data.user_id == request.auth.uid || isAdmin());
+      allow delete: if isAdmin();
+    }
+  }
+}
