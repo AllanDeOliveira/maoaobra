@@ -1,11 +1,15 @@
 import { brMobilePhone } from '@maoaobra/shared';
-import { router } from 'expo-router';
+import { Redirect } from 'expo-router';
 import { useState } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Button, ErrorText, Field } from '@/components/ui';
 import { authClient } from '@/lib/auth-client';
 import { colors } from '@/theme';
 
 export default function Login() {
+  // Sai do login assim que a sessão existir, inclusive logo após verificar o código:
+  // navegar direto daria corrida com a atualização da sessão e voltaria para cá
+  const { data: session } = authClient.useSession();
   const [phone, setPhone] = useState('');
   const [code, setCode] = useState('');
   const [sentTo, setSentTo] = useState<string | null>(null);
@@ -35,12 +39,10 @@ export default function Login() {
     setError(null);
     const result = await authClient.phoneNumber.verify({ phoneNumber: sentTo, code });
     setLoading(false);
-    if (result.error) {
-      setError('Código inválido ou expirado.');
-      return;
-    }
-    router.replace('/');
+    if (result.error) setError('Código inválido ou expirado.');
   }
+
+  if (session) return <Redirect href="/" />;
 
   return (
     <View style={styles.screen}>
@@ -51,9 +53,8 @@ export default function Login() {
 
         {sentTo ? (
           <>
-            <Text style={styles.label}>Digite o código enviado para {sentTo}</Text>
-            <TextInput
-              style={styles.input}
+            <Field
+              label={`Digite o código enviado para ${sentTo}`}
               value={code}
               onChangeText={setCode}
               placeholder="000000"
@@ -80,9 +81,8 @@ export default function Login() {
           </>
         ) : (
           <>
-            <Text style={styles.label}>Seu celular com DDD</Text>
-            <TextInput
-              style={styles.input}
+            <Field
+              label="Seu celular com DDD"
               value={phone}
               onChangeText={setPhone}
               placeholder="(65) 99999-0000"
@@ -95,32 +95,9 @@ export default function Login() {
           </>
         )}
 
-        {error && <Text style={styles.error}>{error}</Text>}
+        <ErrorText error={error} />
       </View>
     </View>
-  );
-}
-
-function Button(props: {
-  label: string;
-  onPress: () => void;
-  loading: boolean;
-  disabled: boolean;
-}) {
-  const inactive = props.loading || props.disabled;
-  return (
-    <Pressable
-      style={[styles.button, inactive && { opacity: 0.5 }]}
-      onPress={props.onPress}
-      disabled={inactive}
-      accessibilityRole="button"
-    >
-      {props.loading ? (
-        <ActivityIndicator color={colors.white} />
-      ) : (
-        <Text style={styles.buttonText}>{props.label}</Text>
-      )}
-    </Pressable>
   );
 }
 
@@ -149,23 +126,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 12,
   },
-  label: { fontWeight: '700', color: colors.text },
-  input: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 18,
-    color: colors.text,
-  },
-  button: {
-    backgroundColor: colors.primary,
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-  },
-  buttonText: { color: colors.white, fontWeight: '800', fontSize: 16 },
   link: { color: colors.primary, fontWeight: '700', textAlign: 'center', marginTop: 4 },
-  error: { color: colors.primary, textAlign: 'center' },
 });

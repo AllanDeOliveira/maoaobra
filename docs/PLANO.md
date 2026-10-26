@@ -49,17 +49,31 @@ Regras:
 
 Tetos conhecidos (marcados com `ponytail:` no código):
 - Rate limit do login em memória: vale por instância → storage no banco ao escalar.
-- Chat em tempo real (fase 1) numa instância → Redis pub/sub ao rodar 2+ instâncias.
+- Chat por polling (3 s com a conversa aberta) → WebSocket quando volume ou latência pedirem.
+- Conversa devolvida inteira → paginar se pedidos passarem a ter centenas de mensagens.
+- Sem permissão de localização, o app usa o centro de Cáceres → geocodificar CEP ao expandir.
+
+## Pedido (modelo B)
+
+```
+requested ──pro aceita──► accepted ──cliente confirma──► confirmed ──pro conclui──► completed
+    │ pro recusa → declined     │ qualquer lado → cancelled   │ qualquer lado → cancelled
+    │ cliente → cancelled                                     │ cliente, a partir do dia → no_show
+```
+
+Regras em `packages/shared/src/order.ts` (fonte única; a API devolve ao app as ações possíveis).
+Telefone e endereço só aparecem a partir de `confirmed`. Na fase 2, `confirmed` passa a exigir a taxa paga.
 
 ## Roteiro
 
-| Fase                        | Entrega                                                                                                                              | Pronto quando                                                  |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------- |
-| **0. Fundação** ✅          | Monorepo, Postgres + migrations, login por celular, app Expo, CI                                                                     | Login funciona no app contra a API; testes de integração no CI |
-| **1. Marketplace**          | Onboarding (nome, papel), cadastro do profissional + aprovação, categorias, busca por raio, pedido + chat + máquina de estados, push | Pedido vai de solicitado a concluído entre dois aparelhos      |
-| **2. Taxa de serviço**      | Gateway (Pix + cartão), cobrança na confirmação, webhook idempotente, reembolso automático, liberação do contato após pagamento      | Fluxo com dinheiro no sandbox, incluindo reembolso             |
-| **3. Confiança e operação** | Avaliações, painel admin (aprovações, pedidos, métricas de vazamento), LGPD (termos, exportar/apagar dados)                          | Admin opera o piloto sem acessar o banco                       |
-| **4. Piloto**               | Lojas, beta fechado em Cáceres com profissionais recrutados um a um                                                                  | Primeiros pedidos reais pagos                                  |
+| Fase                        | Entrega                                                                                                                         | Pronto quando                                                  |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| **0. Fundação** ✅          | Monorepo, Postgres + migrations, login por celular, app Expo, CI                                                                | Login funciona no app contra a API; testes de integração no CI |
+| **1. Marketplace** ✅       | Onboarding, cadastro do profissional + aprovação, categorias, busca por raio, pedido + chat + máquina de estados                | Pedido vai de solicitado a concluído entre dois aparelhos      |
+| **1b. Complementos**        | Push (Expo), fotos de perfil/portfólio (storage S3/R2), edição de perfil do profissional, "repetir serviço"                     | Profissional é avisado de pedido novo com o app fechado        |
+| **2. Taxa de serviço**      | Gateway (Pix + cartão), cobrança na confirmação, webhook idempotente, reembolso automático, liberação do contato após pagamento | Fluxo com dinheiro no sandbox, incluindo reembolso             |
+| **3. Confiança e operação** | Avaliações, painel admin (aprovações, pedidos, métricas de vazamento), LGPD (termos, exportar/apagar dados)                     | Admin opera o piloto sem acessar o banco                       |
+| **4. Piloto**               | Lojas, beta fechado em Cáceres com profissionais recrutados um a um                                                             | Primeiros pedidos reais pagos                                  |
 
 ## Pendências fora do código
 

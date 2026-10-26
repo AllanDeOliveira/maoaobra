@@ -1,97 +1,134 @@
-// Tabelas do Better Auth: geradas com `pnpm dlx auth generate --config src/auth.ts` e ajustadas à mão
-// (timestamptz e enum de papel). Ao regerar, reaplique esses dois ajustes.
-import { ROLES } from '@maoaobra/shared';
-import { relations } from 'drizzle-orm';
-import { boolean, index, pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { ORDER_STATUSES, PERIODS, PRO_STATUSES } from '@maoaobra/shared';
+import { sql } from 'drizzle-orm';
+import {
+  bigint,
+  boolean,
+  date,
+  geometry,
+  index,
+  integer,
+  pgEnum,
+  pgTable,
+  primaryKey,
+  text,
+  timestamp,
+  uuid,
+} from 'drizzle-orm/pg-core';
+import { users } from './auth-schema';
+
+export * from './auth-schema';
 
 const tz = (name: string) => timestamp(name, { withTimezone: true });
+// x = longitude, y = latitude. O Drizzle grava com SRID 0, que o cast ::geography trata como WGS84 (GPS).
+const point = (name: string) => geometry(name, { type: 'point', mode: 'xy' });
+// Distância em metros exige geography; o índice é sobre a mesma expressão usada nas consultas
+const geoIndex = (name: string, column: Parameters<typeof sql>[1]) =>
+  index(name).using('gist', sql`(${column}::geography)`);
 
-export const roleEnum = pgEnum('role', ROLES);
+export const proStatusEnum = pgEnum('pro_status', PRO_STATUSES);
+export const orderStatusEnum = pgEnum('order_status', ORDER_STATUSES);
+export const periodEnum = pgEnum('period', PERIODS);
 
-export const users = pgTable('users', {
-  id: text('id').primaryKey(),
+export const categories = pgTable('categories', {
+  slug: text('slug').primaryKey(),
   name: text('name').notNull(),
-  email: text('email').notNull().unique(),
-  emailVerified: boolean('email_verified').default(false).notNull(),
-  image: text('image'),
-  createdAt: tz('created_at').defaultNow().notNull(),
-  updatedAt: tz('updated_at')
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
-  phoneNumber: text('phone_number').unique(),
-  phoneNumberVerified: boolean('phone_number_verified'),
-  role: roleEnum('role').default('customer').notNull(),
+  active: boolean('active').default(true).notNull(),
 });
 
-export const sessions = pgTable(
-  'sessions',
+export const proProfiles = pgTable(
+  'pro_profiles',
   {
-    id: text('id').primaryKey(),
-    expiresAt: tz('expires_at').notNull(),
-    token: text('token').notNull().unique(),
-    createdAt: tz('created_at').defaultNow().notNull(),
-    updatedAt: tz('updated_at')
-      .$onUpdate(() => new Date())
-      .notNull(),
-    ipAddress: text('ip_address'),
-    userAgent: text('user_agent'),
     userId: text('user_id')
-      .notNull()
+      .primaryKey()
       .references(() => users.id, { onDelete: 'cascade' }),
-  },
-  (table) => [index('sessions_userId_idx').on(table.userId)],
-);
-
-export const accounts = pgTable(
-  'accounts',
-  {
-    id: text('id').primaryKey(),
-    accountId: text('account_id').notNull(),
-    providerId: text('provider_id').notNull(),
-    userId: text('user_id')
-      .notNull()
-      .references(() => users.id, { onDelete: 'cascade' }),
-    accessToken: text('access_token'),
-    refreshToken: text('refresh_token'),
-    idToken: text('id_token'),
-    accessTokenExpiresAt: tz('access_token_expires_at'),
-    refreshTokenExpiresAt: tz('refresh_token_expires_at'),
-    scope: text('scope'),
-    password: text('password'),
-    createdAt: tz('created_at').defaultNow().notNull(),
-    updatedAt: tz('updated_at')
-      .$onUpdate(() => new Date())
-      .notNull(),
-  },
-  (table) => [index('accounts_userId_idx').on(table.userId)],
-);
-
-export const verifications = pgTable(
-  'verifications',
-  {
-    id: text('id').primaryKey(),
-    identifier: text('identifier').notNull(),
-    value: text('value').notNull(),
-    expiresAt: tz('expires_at').notNull(),
+    bio: text('bio').notNull(),
+    cpf: text('cpf').notNull().unique(),
+    status: proStatusEnum('status').default('pending').notNull(),
+    serviceRadiusKm: integer('service_radius_km').notNull(),
+    location: point('location').notNull(),
+    reviewedAt: tz('reviewed_at'),
     createdAt: tz('created_at').defaultNow().notNull(),
     updatedAt: tz('updated_at')
       .defaultNow()
       .$onUpdate(() => new Date())
       .notNull(),
   },
-  (table) => [index('verifications_identifier_idx').on(table.identifier)],
+  (t) => [geoIndex('pro_profiles_location_idx', t.location)],
 );
 
-export const usersRelations = relations(users, ({ many }) => ({
-  sessions: many(sessions),
-  accounts: many(accounts),
-}));
+export const proCategories = pgTable(
+  'pro_categories',
+  {
+    userId: text('user_id')
+      .notNull()
+      .references(() => proProfiles.userId, { onDelete: 'cascade' }),
+    categorySlug: text('category_slug')
+      .notNull()
+      .references(() => categories.slug),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.categorySlug] })],
+);
 
-export const sessionsRelations = relations(sessions, ({ one }) => ({
-  user: one(users, { fields: [sessions.userId], references: [users.id] }),
-}));
+export const orders = pgTable(
+  'orders',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    customerId: text('customer_id')
+      .notNull()
+      .references(() => users.id),
+    proId: text('pro_id')
+      .notNull()
+      .references(() => users.id),
+    categorySlug: text('category_slug')
+      .notNull()
+      .references(() => categories.slug),
+    status: orderStatusEnum('status').default('requested').notNull(),
+    description: text('description').notNull(),
+    scheduledDate: date('scheduled_date', { mode: 'string' }).notNull(),
+    period: periodEnum('period').notNull(),
+    address: text('address').notNull(),
+    neighborhood: text('neighborhood').notNull(),
+    location: point('location').notNull(),
+    createdAt: tz('created_at').defaultNow().notNull(),
+    updatedAt: tz('updated_at')
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  (t) => [index('orders_customer_idx').on(t.customerId), index('orders_pro_idx').on(t.proId)],
+);
 
-export const accountsRelations = relations(accounts, ({ one }) => ({
-  user: one(users, { fields: [accounts.userId], references: [users.id] }),
-}));
+// Auditoria: toda mudança de status fica registrada (from null = criação)
+export const orderEvents = pgTable(
+  'order_events',
+  {
+    id: bigint('id', { mode: 'number' }).primaryKey().generatedAlwaysAsIdentity(),
+    orderId: uuid('order_id')
+      .notNull()
+      .references(() => orders.id, { onDelete: 'cascade' }),
+    fromStatus: orderStatusEnum('from_status'),
+    toStatus: orderStatusEnum('to_status').notNull(),
+    actorId: text('actor_id')
+      .notNull()
+      .references(() => users.id),
+    createdAt: tz('created_at').defaultNow().notNull(),
+  },
+  (t) => [index('order_events_order_idx').on(t.orderId)],
+);
+
+export const messages = pgTable(
+  'messages',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    orderId: uuid('order_id')
+      .notNull()
+      .references(() => orders.id, { onDelete: 'cascade' }),
+    senderId: text('sender_id')
+      .notNull()
+      .references(() => users.id),
+    body: text('body').notNull(),
+    mentionsContact: boolean('mentions_contact').default(false).notNull(),
+    createdAt: tz('created_at').defaultNow().notNull(),
+  },
+  (t) => [index('messages_order_created_idx').on(t.orderId, t.createdAt)],
+);

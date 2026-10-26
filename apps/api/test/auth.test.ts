@@ -1,51 +1,17 @@
-import { afterAll, describe, expect, it, vi } from 'vitest';
-import { buildApp } from '../src/app';
-import { sql } from '../src/db';
-import { sms } from '../src/lib/sms';
+import { afterAll, describe, expect, it } from 'vitest';
+import { app, as, closeAll, login, origin, requestCode } from './helpers';
 
-const app = buildApp();
-const headers = { origin: 'http://localhost:8081' };
-
-afterAll(async () => {
-  await app.close();
-  await sql.end();
-});
-
-async function requestCode(phoneNumber: string) {
-  const send = vi.spyOn(sms, 'send').mockResolvedValue();
-  const res = await app.inject({
-    method: 'POST',
-    url: '/api/auth/phone-number/send-otp',
-    headers,
-    payload: { phoneNumber },
-  });
-  const code = send.mock.calls.at(-1)?.[1].match(/\d{6}/)?.[0];
-  send.mockRestore();
-  return { res, code };
-}
-
-async function login(phoneNumber: string) {
-  const { code } = await requestCode(phoneNumber);
-  const res = await app.inject({
-    method: 'POST',
-    url: '/api/auth/phone-number/verify',
-    headers,
-    payload: { phoneNumber, code },
-  });
-  const setCookie = [res.headers['set-cookie'] ?? []].flat();
-  const cookie = setCookie.map((c) => c.split(';')[0]).join('; ');
-  return { res, cookie };
-}
+afterAll(closeAll);
 
 describe('login por telefone', () => {
-  it('primeiro código verificado cria conta de cliente e abre sessão', async () => {
-    const { res, cookie } = await login('+5565999990001');
+  it('primeiro código verificado cria conta de cliente, sem nome (onboarding pendente)', async () => {
+    const { res, cookie, phoneNumber } = await login();
     expect(res.statusCode).toBe(200);
     expect(cookie).toContain('session_token');
 
-    const me = await app.inject({ method: 'GET', url: '/me', headers: { cookie } });
+    const me = await as(cookie)('GET', '/me');
     expect(me.statusCode).toBe(200);
-    expect(me.json()).toMatchObject({ phoneNumber: '+5565999990001', role: 'customer' });
+    expect(me.json()).toMatchObject({ phoneNumber, role: 'customer', name: '' });
   });
 
   it('código errado não abre sessão', async () => {
@@ -53,7 +19,7 @@ describe('login por telefone', () => {
     const res = await app.inject({
       method: 'POST',
       url: '/api/auth/phone-number/verify',
-      headers,
+      headers: origin,
       payload: { phoneNumber: '+5565999990002', code: '000000' },
     });
     expect(res.statusCode).toBeGreaterThanOrEqual(400);
@@ -66,17 +32,17 @@ describe('login por telefone', () => {
     expect(code).toBeUndefined();
   });
 
-  it('usuário não consegue promover o próprio papel', async () => {
-    const { cookie } = await login('+5565999990003');
-    await app.inject({
-      method: 'POST',
-      url: '/api/auth/update-user',
-      headers: { ...headers, cookie },
-      payload: { role: 'admin' },
-    });
+  it('usuário define o próprio nome, mas não o próprio papel', async () => {
+    const { cookie } = await login();
+    await as(cookie)('POST', '/api/auth/update-user', { name: 'Maria', role: 'admin' });
 
-    const me = await app.inject({ method: 'GET', url: '/me', headers: { cookie } });
-    expect(me.json().role).toBe('customer');
+    const me = await as(cookie)('GET', '/me');
+    expect(me.json()).toMatchObject({ role: 'customer' });
+    await as(cookie)('POST', '/api/auth/update-user', { name: 'Maria' });
+    expect((await as(cookie)('GET', '/me')).json()).toMatchObject({
+      name: 'Maria',
+      role: 'customer',
+    });
   });
 
   it('/me sem sessão responde 401', async () => {

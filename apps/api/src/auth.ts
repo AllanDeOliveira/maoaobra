@@ -39,6 +39,8 @@ export const auth = betterAuth({
       // Login e cadastro são o mesmo fluxo: o primeiro código verificado cria a conta
       signUpOnVerification: {
         getTempEmail: (phone) => `${phone.slice(1)}@phone.maoaobra.invalid`,
+        // Nome vazio = onboarding pendente; o app pede o nome logo após o primeiro login
+        getTempName: () => '',
       },
     }),
     expo(),
