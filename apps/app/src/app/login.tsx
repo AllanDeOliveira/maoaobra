@@ -2,7 +2,7 @@ import { brMobilePhone } from '@maoaobra/shared';
 import { Redirect } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { Button, ErrorText, Field } from '@/components/ui';
+import { Brand, Button, ErrorText, Field } from '@/components/ui';
 import { authClient } from '@/lib/auth-client';
 import { colors } from '@/theme';
 
@@ -47,8 +47,9 @@ export default function Login() {
   return (
     <View style={styles.screen}>
       <View style={styles.card}>
-        <Text style={styles.brand}>
-          mão<Text style={{ color: colors.primary }}>A</Text>obra
+        <Brand size={32} />
+        <Text style={styles.headline}>
+          {sentTo ? 'Confira seu celular' : 'Entre com seu celular'}
         </Text>
 
         {sentTo ? (
@@ -102,29 +103,8 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 16,
-    backgroundColor: colors.background,
-  },
-  card: {
-    width: '100%',
-    maxWidth: 420,
-    alignSelf: 'center',
-    gap: 12,
-    padding: 24,
-    borderRadius: 24,
-    backgroundColor: colors.white,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  brand: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: colors.text,
-    textAlign: 'center',
-    marginBottom: 12,
-  },
-  link: { color: colors.primary, fontWeight: '700', textAlign: 'center', marginTop: 4 },
+  screen: { flex: 1, padding: 24, paddingTop: 96, backgroundColor: colors.background },
+  card: { width: '100%', maxWidth: 420, alignSelf: 'center', gap: 14 },
+  headline: { fontSize: 22, fontWeight: '700', color: colors.text, marginBottom: 12 },
+  link: { color: colors.text, fontWeight: '600', textAlign: 'center', padding: 8 },
 });

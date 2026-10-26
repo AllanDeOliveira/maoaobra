@@ -1,7 +1,6 @@
 import type { PendingPro } from '@maoaobra/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Text, View } from 'react-native';
-import { SignOut } from '@/components/SignOut';
 import { Button, Card, ErrorText, Label, Loading, Muted, Screen } from '@/components/ui';
 import { api } from '@/lib/api';
 import { colors } from '@/theme';
@@ -21,7 +20,7 @@ export function AdminHome() {
   });
 
   return (
-    <Screen title="Admin · Aprovações" right={<SignOut />}>
+    <Screen title="Admin · Aprovações">
       {pending.isPending && <Loading />}
       <ErrorText error={pending.error ?? review.error} />
       {pending.data?.length === 0 && <Muted>Nenhum cadastro aguardando aprovação.</Muted>}

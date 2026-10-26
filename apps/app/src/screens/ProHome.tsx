@@ -2,7 +2,6 @@ import type { MyProProfile } from '@maoaobra/shared';
 import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { OrdersList } from '@/components/OrdersList';
-import { SignOut } from '@/components/SignOut';
 import { Button, Card, ErrorText, Label, Loading, Muted, Screen } from '@/components/ui';
 import { api } from '@/lib/api';
 
@@ -15,12 +14,12 @@ export function ProHome() {
   });
 
   return (
-    <Screen title="Painel do profissional" right={<SignOut />}>
+    <Screen brand>
       {profile.isPending && <Loading />}
       <ErrorText error={profile.error} />
 
       {profile.data?.status === 'pending' && (
-        <Card>
+        <Card tone="warning">
           <Label>Cadastro em análise</Label>
           <Muted>
             Nossa equipe está conferindo seus dados. Assim que for aprovado, você começa a aparecer

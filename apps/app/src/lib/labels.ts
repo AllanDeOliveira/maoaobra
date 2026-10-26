@@ -1,4 +1,6 @@
+import type Ionicons from '@expo/vector-icons/Ionicons';
 import type { OrderStatus, Period } from '@maoaobra/shared';
+import type { Tone } from '@/theme';
 
 export const statusLabel: Record<OrderStatus, string> = {
   requested: 'Aguardando profissional',
@@ -16,6 +18,30 @@ export const statusLabelForPro: Record<OrderStatus, string> = {
   requested: 'Novo pedido',
   accepted: 'Aguardando confirmação do cliente',
 };
+
+/** Cor do status: espera em âmbar, confirmado em verde; vermelho só para o que deu errado. */
+export const statusTone: Record<OrderStatus, Tone> = {
+  requested: 'warning',
+  accepted: 'warning',
+  declined: 'neutral',
+  confirmed: 'success',
+  completed: 'neutral',
+  cancelled: 'neutral',
+  no_show: 'danger',
+};
+
+export const ACTIVE_STATUSES: OrderStatus[] = ['requested', 'accepted', 'confirmed'];
+
+export type IconName = keyof typeof Ionicons.glyphMap;
+
+// ponytail: ícones por slug no app; categoria nova sem ícone cai no genérico
+const CATEGORY_ICONS: Record<string, IconName> = {
+  diarista: 'sparkles-outline',
+  eletricista: 'flash-outline',
+  montador: 'hammer-outline',
+  capinador: 'leaf-outline',
+};
+export const categoryIcon = (slug: string) => CATEGORY_ICONS[slug] ?? 'construct-outline';
 
 export const actionLabel: Record<OrderStatus, string> = {
   requested: '',

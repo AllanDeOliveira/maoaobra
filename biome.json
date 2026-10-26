@@ -2,7 +2,13 @@
   "$schema": "https://biomejs.dev/schemas/2.6.3/schema.json",
   "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
   "files": {
-    "includes": ["**", "!**/.expo", "!**/expo-env.d.ts", "!apps/api/drizzle/meta"]
+    "includes": [
+      "**",
+      "!**/.expo",
+      "!**/expo-env.d.ts",
+      "!apps/api/drizzle/meta",
+      "!pnpm-lock.yaml"
+    ]
   },
   "formatter": {
     "indentStyle": "space",

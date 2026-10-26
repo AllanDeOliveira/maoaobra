@@ -4,6 +4,7 @@
   "main": "expo-router/entry",
   "dependencies": {
     "@better-auth/expo": "^1.7.13",
+    "@expo/vector-icons": "^15.1.1",
     "@maoaobra/shared": "workspace:*",
     "@tanstack/react-query": "^5.104.5",
     "better-auth": "^1.7.13",
